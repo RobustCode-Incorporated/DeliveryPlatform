@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: delivery-platform
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/delivery_db
+    username: delivery
+    password: delivery123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  flyway:
+    enabled: true
+
+server:
+  port: 8080
