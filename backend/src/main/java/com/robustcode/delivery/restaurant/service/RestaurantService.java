@@ -10,6 +10,8 @@ import com.robustcode.delivery.restaurant.domain.Restaurant;
 import com.robustcode.delivery.restaurant.dto.CreateRestaurantRequest;
 import com.robustcode.delivery.restaurant.dto.RestaurantResponse;
 import com.robustcode.delivery.restaurant.repository.RestaurantRepository;
+import com.robustcode.delivery.user.domain.User;
+import com.robustcode.delivery.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +23,8 @@ public class RestaurantService {
 
 
     private final RestaurantRepository repository;
+
+    private final UserRepository userRepository;
 
 
 
@@ -94,6 +98,30 @@ public class RestaurantService {
 
 
         return RestaurantResponse.from(restaurant);
+
+    }
+
+
+    @Transactional(readOnly = true)
+    public RestaurantResponse findMyRestaurant(String email){
+
+        User user = userRepository.findByEmail(email)
+
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found"
+                        )
+                );
+
+        if(user.getRestaurant() == null){
+            throw new RuntimeException(
+                    "No restaurant assigned to user"
+            );
+        }
+
+        return RestaurantResponse.from(
+                user.getRestaurant()
+        );
 
     }
 

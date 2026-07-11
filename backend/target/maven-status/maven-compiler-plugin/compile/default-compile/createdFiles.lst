@@ -5,6 +5,7 @@ com/robustcode/delivery/auth/dto/LoginResponse.class
 com/robustcode/delivery/delivery/dto/AssignDriverRequest.class
 com/robustcode/delivery/delivery/domain/Delivery$DeliveryBuilder.class
 com/robustcode/delivery/delivery/dto/DeliveryResponse.class
+com/robustcode/delivery/security/PasswordGenerator.class
 com/robustcode/delivery/user/domain/User$UserBuilder.class
 com/robustcode/delivery/driver/domain/Driver$DriverBuilder.class
 com/robustcode/delivery/driver/repository/DriverRepository.class

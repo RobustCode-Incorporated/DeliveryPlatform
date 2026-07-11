@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.robustcode.delivery.restaurant.dto.CreateRestaurantRequest;
 import com.robustcode.delivery.restaurant.dto.RestaurantResponse;
@@ -24,6 +26,7 @@ public class RestaurantController {
 
 
 
+    @PreAuthorize("hasAnyRole('ADMIN','RESTAURANT')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantResponse create(
@@ -36,6 +39,7 @@ public class RestaurantController {
 
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<RestaurantResponse> findAll(){
 
@@ -44,7 +48,20 @@ public class RestaurantController {
     }
 
 
+    @PreAuthorize("hasRole('RESTAURANT')")
+    @GetMapping("/me")
+    public RestaurantResponse getMyRestaurant(
+            Authentication authentication
+    ){
 
+        return service.findMyRestaurant(
+                authentication.getName()
+        );
+
+    }
+
+
+    @PreAuthorize("hasAnyRole('ADMIN','RESTAURANT')")
     @GetMapping("/{id}")
     public RestaurantResponse findById(
             @PathVariable Long id

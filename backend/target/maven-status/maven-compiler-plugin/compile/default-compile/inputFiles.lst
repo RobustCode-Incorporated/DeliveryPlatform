@@ -29,6 +29,7 @@
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/restaurant/service/RestaurantService.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/security/JwtAuthenticationFilter.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/security/JwtService.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/security/PasswordGenerator.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/user/controller/UserController.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/user/domain/User.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/user/dto/CreateUserRequest.java

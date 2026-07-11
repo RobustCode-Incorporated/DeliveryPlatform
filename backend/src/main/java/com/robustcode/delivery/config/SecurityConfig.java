@@ -72,7 +72,6 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-
                         // Auth public
                         .requestMatchers(
                                 "/api/auth/**"
@@ -85,6 +84,50 @@ public class SecurityConfig {
                                 "/actuator/**"
                         )
                         .permitAll()
+
+
+                        // Administration globale
+                        .requestMatchers(
+                                "/api/admin/**"
+                        )
+                        .hasRole("ADMIN")
+
+
+                        // Gestion restaurant
+                        .requestMatchers(
+                                "/api/restaurants/**"
+                        )
+                        .hasAnyRole("ADMIN", "RESTAURANT")
+
+
+                        // Gestion drivers
+                        .requestMatchers(
+                                "/api/drivers/**"
+                        )
+                        .hasAnyRole("ADMIN", "DRIVER")
+
+
+                        // Livraisons
+                        .requestMatchers(
+                                "/api/deliveries/**"
+                        )
+                        .hasAnyRole(
+                                "ADMIN",
+                                "DISPATCHER",
+                                "DRIVER",
+                                "RESTAURANT"
+                        )
+
+
+                        // Commandes clients
+                        .requestMatchers(
+                                "/api/orders/**"
+                        )
+                        .hasAnyRole(
+                                "ADMIN",
+                                "CUSTOMER",
+                                "RESTAURANT"
+                        )
 
 
                         // Tout le reste nécessite JWT
