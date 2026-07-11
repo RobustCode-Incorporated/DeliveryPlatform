@@ -2,6 +2,8 @@ package com.robustcode.delivery.user.domain;
 
 import java.time.LocalDateTime;
 import com.robustcode.delivery.driver.domain.Driver;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +30,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -51,6 +54,7 @@ public class User {
     private Role role;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Driver driver;
 
     @Builder.Default
@@ -84,6 +88,7 @@ public class User {
     public enum Role {
         ADMIN,
         DISPATCHER,
-        DRIVER
+        DRIVER,
+        CUSTOMER
     }
 }

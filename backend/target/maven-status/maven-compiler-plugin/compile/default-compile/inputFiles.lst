@@ -1,5 +1,12 @@
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/DeliveryPlatformApplication.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/config/SecurityConfig.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/delivery/controller/DeliveryController.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/delivery/domain/Delivery.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/delivery/dto/AssignDriverRequest.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/delivery/dto/CreateDeliveryRequest.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/delivery/dto/DeliveryResponse.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/delivery/repository/DeliveryRepository.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/delivery/service/DeliveryService.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/driver/controller/DriverController.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/driver/domain/Driver.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/driver/dto/CreateDriverRequest.java

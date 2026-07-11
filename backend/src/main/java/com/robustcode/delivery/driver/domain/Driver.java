@@ -3,6 +3,8 @@ package com.robustcode.delivery.driver.domain;
 import java.time.LocalDateTime;
 
 import com.robustcode.delivery.user.domain.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.robustcode.delivery.vehicle.domain.Vehicle;
 
 import jakarta.persistence.Column;
@@ -31,6 +33,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Driver {
 
     @Id
@@ -39,10 +42,12 @@ public class Driver {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JsonIgnore
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id", unique = true)
+    @JsonIgnore
     private Vehicle vehicle;
 
     @Column(name = "phone_number", nullable = false)
