@@ -58,6 +58,7 @@ public class User {
     private Driver driver;
 
     @Builder.Default
+    @Column(nullable = false)
     private boolean enabled = true;
 
     @Column(name = "created_at", nullable = false, updatable = false)

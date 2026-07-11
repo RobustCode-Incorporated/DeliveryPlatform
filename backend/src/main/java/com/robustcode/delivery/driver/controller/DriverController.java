@@ -1,33 +1,41 @@
 package com.robustcode.delivery.driver.controller;
 
+
 import com.robustcode.delivery.driver.dto.CreateDriverRequest;
 import com.robustcode.delivery.driver.dto.DriverResponse;
 import com.robustcode.delivery.driver.service.DriverService;
 
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import lombok.RequiredArgsConstructor;
+
 
 
 @RestController
 @RequestMapping("/api/drivers")
+@RequiredArgsConstructor
 public class DriverController {
 
 
     private final DriverService driverService;
 
 
-    public DriverController(DriverService driverService) {
-        this.driverService = driverService;
-    }
-
 
     @PostMapping
     public ResponseEntity<DriverResponse> createDriver(
-            @RequestBody CreateDriverRequest request
-    ) {
+            @Valid @RequestBody CreateDriverRequest request
+    ){
 
-        return ResponseEntity.ok(
-                driverService.createDriver(request)
-        );
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                    driverService.createDriver(request)
+                );
+
     }
+
 }

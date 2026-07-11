@@ -1,22 +1,18 @@
 package com.robustcode.delivery.vehicle.domain;
 
+
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.robustcode.delivery.driver.domain.Driver;
+
+
+import jakarta.persistence.*;
+import lombok.*;
+
+
 
 @Entity
 @Table(name = "vehicles")
@@ -25,49 +21,97 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({
+        "hibernateLazyInitializer",
+        "handler"
+})
 public class Vehicle {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "vehicle_type", nullable = false)
+
+
+    @Column(
+        name = "vehicle_type",
+        nullable = false
+    )
     private String vehicleType;
 
-    @Column(name = "plate_number", nullable = false, unique = true)
+
+
+    @Column(
+        name = "plate_number",
+        nullable = false,
+        unique = true
+    )
     private String plateNumber;
+
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
 
-    @Builder.Default
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "updated_at")
+
+    @OneToOne(
+        mappedBy = "vehicle",
+        fetch = FetchType.LAZY
+    )
+    @JsonIgnore
+    private Driver driver;
+
+
+
+    @Builder.Default
+    @Column(
+        name = "created_at",
+        nullable = false,
+        updatable = false
+    )
+    private LocalDateTime createdAt =
+            LocalDateTime.now();
+
+
+
     private LocalDateTime updatedAt;
 
+
+
+
     @PrePersist
-    protected void onCreate() {
+    protected void onCreate(){
 
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
 
     }
 
+
+
     @PreUpdate
-    protected void onUpdate() {
+    protected void onUpdate(){
 
         updatedAt = LocalDateTime.now();
 
     }
 
+
+
+
     public enum Status {
 
+
         AVAILABLE,
+
         ASSIGNED,
+
         MAINTENANCE
+
 
     }
 
