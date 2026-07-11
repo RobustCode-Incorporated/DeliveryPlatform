@@ -1,0 +1,19 @@
+package com.robustcode.delivery.driver.dto;
+
+import com.robustcode.delivery.driver.domain.Driver;
+
+public record DriverResponse(
+
+        Long id,
+
+        Long userId,
+
+        String phoneNumber,
+
+        String vehicleType,
+
+        String vehiclePlate,
+
+        Driver.AvailabilityStatus availabilityStatus
+
+) {}
