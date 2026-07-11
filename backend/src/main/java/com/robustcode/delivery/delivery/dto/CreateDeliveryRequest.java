@@ -15,6 +15,9 @@ public class CreateDeliveryRequest {
     @NotNull(message = "Customer id is required")
     private Long customerId;
 
+    @NotNull(message = "Restaurant id is required")
+    private Long restaurantId;
+
 
     @NotBlank(message = "Pickup address is required")
     @Size(max = 255)

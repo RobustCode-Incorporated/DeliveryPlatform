@@ -11,6 +11,8 @@ import com.robustcode.delivery.user.domain.User;
 import com.robustcode.delivery.user.repository.UserRepository;
 import com.robustcode.delivery.driver.domain.Driver;
 import com.robustcode.delivery.driver.repository.DriverRepository;
+import com.robustcode.delivery.restaurant.domain.Restaurant;
+import com.robustcode.delivery.restaurant.repository.RestaurantRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +23,7 @@ public class DeliveryService {
     private final DeliveryRepository repository;
     private final UserRepository userRepository;
     private final DriverRepository driverRepository;
+    private final RestaurantRepository restaurantRepository;
 
     public List<Delivery> findAll() {
         return repository.findAll();
@@ -40,8 +43,12 @@ public class DeliveryService {
             throw new RuntimeException("User is not a customer");
         }
 
+        Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
         Delivery delivery = Delivery.builder()
                 .customer(customer)
+                .restaurant(restaurant)
                 .pickupAddress(request.getPickupAddress())
                 .deliveryAddress(request.getDeliveryAddress())
                 .description(request.getDescription())

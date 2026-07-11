@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.robustcode.delivery.driver.domain.Driver;
 import com.robustcode.delivery.user.domain.User;
+import com.robustcode.delivery.restaurant.domain.Restaurant;
 
 
 import jakarta.persistence.*;
@@ -60,6 +61,17 @@ public class Delivery {
             "vehicle"
     })
     private Driver driver;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "restaurant_id",
+            nullable = false
+    )
+    @JsonIgnoreProperties({
+            "hibernateLazyInitializer",
+            "handler"
+    })
+    private Restaurant restaurant;
 
 
 
