@@ -24,7 +24,6 @@ public class OrderController {
     private final OrderService orderService;
 
 
-
     /**
      * CUSTOMER creates an order
      */
@@ -43,7 +42,6 @@ public class OrderController {
     }
 
 
-
     /**
      * CUSTOMER sees his own orders
      */
@@ -57,7 +55,6 @@ public class OrderController {
         );
 
     }
-
 
 
     /**
@@ -75,7 +72,6 @@ public class OrderController {
     }
 
 
-
     /**
      * ADMIN sees all orders
      */
@@ -83,6 +79,108 @@ public class OrderController {
     public List<OrderResponse> findAll(){
 
         return orderService.findAll();
+
+    }
+
+
+    /**
+     * RESTAURANT accepts order
+     */
+    @PatchMapping("/{id}/accept")
+    public OrderResponse acceptOrder(
+            @PathVariable Long id,
+            Authentication authentication
+    ){
+
+        return orderService.acceptOrder(
+                id,
+                authentication.getName()
+        );
+
+    }
+
+
+    /**
+     * RESTAURANT starts preparing order
+     */
+    @PatchMapping("/{id}/prepare")
+    public OrderResponse prepareOrder(
+            @PathVariable Long id,
+            Authentication authentication
+    ){
+
+        return orderService.startPreparing(
+                id,
+                authentication.getName()
+        );
+
+    }
+
+
+    /**
+     * RESTAURANT marks order ready for pickup
+     */
+    @PatchMapping("/{id}/ready")
+    public OrderResponse readyOrder(
+            @PathVariable Long id,
+            Authentication authentication
+    ){
+
+        return orderService.readyForPickup(
+                id,
+                authentication.getName()
+        );
+
+    }
+
+
+    /**
+     * DRIVER picks up order
+     */
+    @PatchMapping("/{id}/pickup")
+    public OrderResponse pickupOrder(
+            @PathVariable Long id,
+            Authentication authentication
+    ){
+
+        return orderService.pickupOrder(
+                id,
+                authentication.getName()
+        );
+
+    }
+
+
+    /**
+     * DRIVER delivers order
+     */
+    @PatchMapping("/{id}/deliver")
+    public OrderResponse deliverOrder(
+            @PathVariable Long id,
+            Authentication authentication
+    ){
+
+        return orderService.deliverOrder(
+                id,
+                authentication.getName()
+        );
+
+    }
+
+
+    /**
+     * ADMIN assigns driver to order
+     */
+    @PatchMapping("/{id}/assign-driver/{driverId}")
+    public OrderResponse assignDriver(
+            @PathVariable Long id,
+            @PathVariable Long driverId
+    ){
+
+        return orderService.assignDriver(
+                id,
+                driverId
+        );
 
     }
 

@@ -21,9 +21,11 @@
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/driver/service/DriverService.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/order/controller/OrderController.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/order/domain/Order.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/order/domain/OrderStatusHistory.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/order/dto/CreateOrderRequest.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/order/dto/OrderResponse.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/order/repository/OrderRepository.java
+/Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/order/repository/OrderStatusHistoryRepository.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/order/service/OrderService.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/restaurant/controller/RestaurantController.java
 /Users/jeanlucluzembansianguana/Projects/DeliveryPlatform/backend/src/main/java/com/robustcode/delivery/restaurant/controller/RestaurantDeliveryController.java
