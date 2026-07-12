@@ -22,6 +22,7 @@ com/robustcode/delivery/vehicle/domain/Vehicle$VehicleBuilder.class
 com/robustcode/delivery/restaurant/controller/RestaurantController.class
 com/robustcode/delivery/driver/domain/Driver$AvailabilityStatus.class
 com/robustcode/delivery/auth/controller/AuthController.class
+com/robustcode/delivery/order/repository/OrderRepository.class
 com/robustcode/delivery/auth/service/AuthService.class
 com/robustcode/delivery/restaurant/domain/Restaurant.class
 com/robustcode/delivery/user/dto/CreateUserRequest.class

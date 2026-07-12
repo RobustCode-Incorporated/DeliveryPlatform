@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.http.HttpMethod;
 
 import org.springframework.security.config.http.SessionCreationPolicy;
 
@@ -93,11 +94,19 @@ public class SecurityConfig {
                         .hasRole("ADMIN")
 
 
-                        // Gestion restaurant
+                        // Gestion restaurant personnel
                         .requestMatchers(
-                                "/api/restaurants/**"
+                                "/api/restaurants/me"
                         )
-                        .hasAnyRole("ADMIN", "RESTAURANT")
+                        .hasRole("RESTAURANT")
+
+
+                        // Administration restaurant globale
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/restaurants"
+                        )
+                        .hasRole("ADMIN")
 
 
                         // Gestion drivers
@@ -119,15 +128,36 @@ public class SecurityConfig {
                         )
 
 
-                        // Commandes clients
+                        // Création commande CUSTOMER
                         .requestMatchers(
-                                "/api/orders/**"
+                                HttpMethod.POST,
+                                "/api/orders"
                         )
-                        .hasAnyRole(
-                                "ADMIN",
-                                "CUSTOMER",
-                                "RESTAURANT"
+                        .hasRole("CUSTOMER")
+
+
+                        // Commandes personnelles CUSTOMER
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/orders/my-orders"
                         )
+                        .hasRole("CUSTOMER")
+
+
+                        // Commandes restaurant
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/orders/restaurant"
+                        )
+                        .hasRole("RESTAURANT")
+
+
+                        // Administration commandes
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/orders"
+                        )
+                        .hasRole("ADMIN")
 
 
                         // Tout le reste nécessite JWT

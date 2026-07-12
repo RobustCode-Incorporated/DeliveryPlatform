@@ -146,6 +146,41 @@ public class DriverService {
 
 
 
+    @Transactional(readOnly = true)
+    public DriverResponse findMyDriver(
+            String email
+    ){
+
+
+        User user = userRepository.findByEmail(email)
+
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found"
+                        )
+                );
+
+
+
+        if(user.getDriver() == null){
+
+            throw new RuntimeException(
+                    "No driver profile assigned to user"
+            );
+
+        }
+
+
+
+        return mapToResponse(
+                user.getDriver()
+        );
+
+    }
+
+
+
+
 
     private DriverResponse mapToResponse(
             Driver driver

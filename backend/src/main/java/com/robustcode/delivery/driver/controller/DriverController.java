@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,22 @@ public class DriverController {
                 .body(
                     driverService.createDriver(request)
                 );
+
+    }
+
+
+
+    /**
+     * DRIVER gets his own profile
+     */
+    @GetMapping("/me")
+    public DriverResponse getMyDriver(
+            Authentication authentication
+    ){
+
+        return driverService.findMyDriver(
+                authentication.getName()
+        );
 
     }
 
