@@ -51,6 +51,12 @@ The system utilizes **JSON Web Tokens (JWT)** with a robust refresh token mechan
 
 
 ---
-PS next part of this project have a frontend part build with ReactTyoescript 10% done actually 
+PS next part of this project have a frontend part build with ReactTypescript web and mobil app 10% done actually for the web app 
 <img width="1470" height="956" alt="Screenshot 2026-07-12 at 8 37 50 PM" src="https://github.com/user-attachments/assets/03fbc91d-f9ec-4e95-9f30-61111e8f3664" />
+
+<img width="1470" height="956" alt="Screenshot 2026-07-13 at 12 07 36 AM" src="https://github.com/user-attachments/assets/af52b109-04ad-4aca-a887-031c5b79c91e" />
+
+<img width="1470" height="956" alt="Screenshot 2026-07-13 at 12 07 27 AM" src="https://github.com/user-attachments/assets/3884b5dc-5469-46e7-b84c-69e4b8699759" />
+
+
 
