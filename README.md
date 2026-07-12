@@ -23,6 +23,8 @@ Built using a **Specification-Driven Development** approach and a **Clean Hexago
 *   **Domain-Driven Design (DDD):** Modeling focused on real-world business constraints.
 *   **TDD (Test-Driven Development):** Rigorous testing cycles using JUnit 5, Mockito, and MockMvc.
 *   **SOLID Principles:** Ensuring a codebase that is clean, maintainable, and modular.
+*   <img width="1470" height="956" alt="image" src="https://github.com/user-attachments/assets/dff53509-ee63-4b16-9cda-ff3ae81d5c9a" />
+
 
 ---
 
@@ -49,3 +51,6 @@ The system utilizes **JSON Web Tokens (JWT)** with a robust refresh token mechan
 
 
 ---
+PS next part of this project have a frontend part build with ReactTyoescript 10% done actually 
+<img width="1470" height="956" alt="Screenshot 2026-07-12 at 8 37 50 PM" src="https://github.com/user-attachments/assets/03fbc91d-f9ec-4e95-9f30-61111e8f3664" />
+
