@@ -174,7 +174,8 @@ public class OrderController {
     @PatchMapping("/{id}/assign-driver/{driverId}")
     public OrderResponse assignDriver(
             @PathVariable Long id,
-            @PathVariable Long driverId
+            @PathVariable Long driverId,
+            Authentication authentication
     ){
 
         return orderService.assignDriver(

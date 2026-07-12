@@ -40,12 +40,43 @@ public class OrderService {
 
 
 
+    private boolean isValidTransition(
+            Order.Status current,
+            Order.Status next
+    ){
+
+        return switch(current){
+
+            case PENDING ->
+                    next == Order.Status.ACCEPTED;
+
+            case ACCEPTED ->
+                    next == Order.Status.PREPARING;
+
+            case PREPARING ->
+                    next == Order.Status.READY_FOR_PICKUP;
+
+            case READY_FOR_PICKUP ->
+                    next == Order.Status.PICKED_UP;
+
+            case PICKED_UP ->
+                    next == Order.Status.DELIVERED;
+
+            default ->
+                    false;
+        };
+    }
+
+
+
+
     public OrderResponse createOrder(
             CreateOrderRequest request,
             String customerEmail
     ){
 
-        User customer = userRepository.findByEmail(customerEmail)
+        User customer =
+                userRepository.findByEmail(customerEmail)
                 .orElseThrow(() ->
                         new RuntimeException("Customer not found")
                 );
@@ -53,7 +84,6 @@ public class OrderService {
 
         Restaurant restaurant =
                 restaurantRepository.findById(request.restaurantId())
-
                 .orElseThrow(() ->
                         new RuntimeException("Restaurant not found")
                 );
@@ -67,15 +97,12 @@ public class OrderService {
 
                 .status(Order.Status.PENDING)
 
-                .totalPrice(
-                        request.totalPrice()
-                )
+                .totalPrice(request.totalPrice())
 
-                .deliveryAddress(
-                        request.deliveryAddress()
-                )
+                .deliveryAddress(request.deliveryAddress())
 
                 .build();
+
 
 
         Order savedOrder =
@@ -106,7 +133,6 @@ public class OrderService {
 
         Order order =
                 orderRepository.findById(orderId)
-
                 .orElseThrow(() ->
                         new RuntimeException("Order not found")
                 );
@@ -116,7 +142,19 @@ public class OrderService {
                 order.getStatus();
 
 
+
+        if(!isValidTransition(oldStatus,newStatus)){
+
+            throw new RuntimeException(
+                    "Invalid order status transition"
+            );
+
+        }
+
+
+
         order.setStatus(newStatus);
+
 
 
         Order savedOrder =
@@ -132,6 +170,7 @@ public class OrderService {
         );
 
 
+
         return OrderResponse.from(savedOrder);
 
     }
@@ -143,6 +182,9 @@ public class OrderService {
             Long orderId,
             String email
     ){
+
+        verifyRestaurantOwner(orderId,email);
+
 
         return updateStatus(
                 orderId,
@@ -160,6 +202,9 @@ public class OrderService {
             String email
     ){
 
+        verifyRestaurantOwner(orderId,email);
+
+
         return updateStatus(
                 orderId,
                 Order.Status.PREPARING,
@@ -175,6 +220,9 @@ public class OrderService {
             Long orderId,
             String email
     ){
+
+        verifyRestaurantOwner(orderId,email);
+
 
         return updateStatus(
                 orderId,
@@ -192,6 +240,9 @@ public class OrderService {
             String email
     ){
 
+        verifyAssignedDriver(orderId,email);
+
+
         return updateStatus(
                 orderId,
                 Order.Status.PICKED_UP,
@@ -203,25 +254,53 @@ public class OrderService {
 
 
 
+
     public OrderResponse deliverOrder(
             Long orderId,
             String email
     ){
 
-        return updateStatus(
-                orderId,
-                Order.Status.DELIVERED,
-                email
-        );
+        verifyAssignedDriver(orderId,email);
+
+
+        OrderResponse response =
+                updateStatus(
+                        orderId,
+                        Order.Status.DELIVERED,
+                        email
+                );
+
+
+        Order order =
+                orderRepository.findById(orderId)
+                .orElseThrow();
+
+
+
+        Driver driver =
+                order.getDriver();
+
+
+        if(driver != null){
+
+            driver.setAvailabilityStatus(
+                    Driver.AvailabilityStatus.AVAILABLE
+            );
+
+            driverRepository.save(driver);
+
+        }
+
+
+
+        return response;
 
     }
 
 
 
 
-    /**
-     * ADMIN assigns driver to order
-     */
+
     public OrderResponse assignDriver(
             Long orderId,
             Long driverId
@@ -229,21 +308,42 @@ public class OrderService {
 
         Order order =
                 orderRepository.findById(orderId)
-
                 .orElseThrow(() ->
                         new RuntimeException("Order not found")
                 );
 
 
+
         Driver driver =
                 driverRepository.findById(driverId)
-
                 .orElseThrow(() ->
                         new RuntimeException("Driver not found")
                 );
 
 
+
+        if(driver.getAvailabilityStatus()
+                != Driver.AvailabilityStatus.AVAILABLE){
+
+            throw new RuntimeException(
+                    "Driver is not available"
+            );
+
+        }
+
+
+
         order.setDriver(driver);
+
+
+
+        driver.setAvailabilityStatus(
+                Driver.AvailabilityStatus.BUSY
+        );
+
+
+        driverRepository.save(driver);
+
 
 
         Order savedOrder =
@@ -258,13 +358,78 @@ public class OrderService {
 
 
 
+
+    private void verifyRestaurantOwner(
+            Long orderId,
+            String email
+    ){
+
+        Order order =
+                orderRepository.findById(orderId)
+                .orElseThrow();
+
+
+
+        User user =
+                userRepository.findByEmail(email)
+                .orElseThrow();
+
+
+
+        if(user.getRestaurant()==null ||
+                !order.getRestaurant()
+                .getId()
+                .equals(user.getRestaurant().getId())
+        ){
+
+            throw new RuntimeException(
+                    "Unauthorized restaurant access"
+            );
+
+        }
+
+    }
+
+
+
+
+
+    private void verifyAssignedDriver(
+            Long orderId,
+            String email
+    ){
+
+        Order order =
+                orderRepository.findById(orderId)
+                .orElseThrow();
+
+
+
+        if(order.getDriver()==null ||
+                !order.getDriver()
+                .getUser()
+                .getEmail()
+                .equals(email)
+        ){
+
+            throw new RuntimeException(
+                    "Driver not assigned to this order"
+            );
+
+        }
+
+    }
+
+
+
+
+
     private void saveHistory(
             Order order,
             Order.Status oldStatus,
             Order.Status newStatus,
             String changedBy
     ){
-
 
         OrderStatusHistory history =
                 OrderStatusHistory.builder()
@@ -296,10 +461,7 @@ public class OrderService {
 
         User customer =
                 userRepository.findByEmail(email)
-
-                .orElseThrow(() ->
-                        new RuntimeException("User not found")
-                );
+                .orElseThrow();
 
 
         return orderRepository.findByCustomer(customer)
@@ -323,10 +485,8 @@ public class OrderService {
 
         User user =
                 userRepository.findByEmail(email)
+                .orElseThrow();
 
-                .orElseThrow(() ->
-                        new RuntimeException("User not found")
-                );
 
 
         Restaurant restaurant =
@@ -334,7 +494,7 @@ public class OrderService {
 
 
 
-        if(restaurant == null){
+        if(restaurant==null){
 
             throw new RuntimeException(
                     "Restaurant not assigned"

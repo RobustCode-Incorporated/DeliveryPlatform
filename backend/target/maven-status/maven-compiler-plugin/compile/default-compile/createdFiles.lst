@@ -42,6 +42,7 @@ com/robustcode/delivery/order/service/OrderService.class
 com/robustcode/delivery/restaurant/dto/RestaurantResponse.class
 com/robustcode/delivery/user/dto/UserResponse.class
 com/robustcode/delivery/restaurant/controller/RestaurantDeliveryController.class
+com/robustcode/delivery/order/service/OrderService$1.class
 com/robustcode/delivery/restaurant/service/RestaurantDeliveryService.class
 com/robustcode/delivery/driver/dto/DriverResponse.class
 com/robustcode/delivery/auth/dto/RegisterRequest.class

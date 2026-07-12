@@ -73,9 +73,10 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // Auth public
+                        // Auth public & Gestion des erreurs
                         .requestMatchers(
-                                "/api/auth/**"
+                                "/api/auth/**",
+                                "/error"
                         )
                         .permitAll()
 
@@ -108,6 +109,20 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
+
+                        // Vehicle creation restricted to ADMIN
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/vehicles"
+                        )
+                        .hasRole("ADMIN")
+
+                        // Driver profile creation restricted to ADMIN
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/drivers"
+                        )
+                        .hasRole("ADMIN")
 
                         // Gestion drivers
                         .requestMatchers(
@@ -150,6 +165,33 @@ public class SecurityConfig {
                                 "/api/orders/restaurant"
                         )
                         .hasRole("RESTAURANT")
+
+
+                        // Restaurant order status management
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/orders/*/accept",
+                                "/api/orders/*/prepare",
+                                "/api/orders/*/ready"
+                        )
+                        .hasRole("RESTAURANT")
+
+
+                        // Driver delivery workflow
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/orders/*/pickup",
+                                "/api/orders/*/deliver"
+                        )
+                        .hasRole("DRIVER")
+
+
+                        // Admin assigns drivers to orders
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/orders/*/assign-driver/*"
+                        )
+                        .hasRole("ADMIN")
 
 
                         // Administration commandes
