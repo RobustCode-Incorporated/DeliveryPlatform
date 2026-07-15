@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { palette } from '../theme/palette';
 
 interface LoginScreenProps {
   email: string;
@@ -63,49 +64,50 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
     gap: 14,
+    backgroundColor: palette.appBackground,
   },
   eyebrow: {
     fontSize: 12,
     letterSpacing: 1.4,
     textTransform: 'uppercase',
-    color: '#0f766e',
+    color: palette.textMuted,
     fontWeight: '700',
   },
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#0f172a',
+    color: palette.textStrong,
   },
   subtitle: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#475569',
+    color: palette.textSubtle,
   },
   input: {
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#cbd5e1',
-    backgroundColor: '#ffffff',
+    borderColor: palette.borderSoft,
+    backgroundColor: palette.card,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#0f172a',
+    color: palette.textStrong,
   },
   primaryButton: {
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 16,
-    backgroundColor: '#0f766e',
+    backgroundColor: palette.primary,
     paddingVertical: 14,
     paddingHorizontal: 18,
   },
   primaryButtonText: {
-    color: '#ffffff',
+    color: palette.primaryText,
     fontWeight: '700',
     fontSize: 15,
   },
   errorText: {
-    color: '#b91c1c',
+    color: palette.dangerText,
     fontSize: 14,
     lineHeight: 20,
   },

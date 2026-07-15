@@ -4,6 +4,7 @@ import { useDriverApp } from './src/app/useDriverApp';
 import { DeliveryDetailScreen } from './src/screens/DeliveryDetailScreen';
 import { DeliveryListScreen } from './src/screens/DeliveryListScreen';
 import { LoginScreen } from './src/screens/LoginScreen';
+import { palette } from './src/theme/palette';
 
 export function App() {
   const app = useDriverApp();
@@ -11,7 +12,7 @@ export function App() {
   if (app.isRestoring) {
     return (
       <SafeAreaView style={styles.centeredScreen}>
-        <ActivityIndicator size="large" color="#0f766e" />
+        <ActivityIndicator size="large" color={palette.primary} />
         <Text style={styles.helperText}>Restauration de la session...</Text>
         <StatusBar style="dark" />
       </SafeAreaView>
@@ -35,11 +36,15 @@ export function App() {
         <DeliveryDetailScreen
           delivery={app.selectedDelivery}
           pendingActionCount={app.pendingActionCountByDelivery[app.selectedDelivery.id] ?? 0}
+          blockedAction={app.blockedActionByDelivery[app.selectedDelivery.id] ?? null}
           failureDraft={app.failureDrafts[app.selectedDelivery.id] ?? ''}
           bannerMessage={app.bannerMessage}
           errorMessage={app.errorMessage}
           isSaving={app.savingDeliveryId === app.selectedDelivery.id}
           onBack={app.closeDelivery}
+          onRefreshServerState={() => void app.refreshDeliveries()}
+          onRetryBlockedAction={() => void app.retryBlockedAction(app.blockedActionByDelivery[app.selectedDelivery!.id]?.actionId ?? '')}
+          onDiscardBlockedAction={() => void app.discardBlockedAction(app.blockedActionByDelivery[app.selectedDelivery!.id]?.actionId ?? '')}
           onFailureDraftChange={(value) => app.setFailureDraft(app.selectedDelivery!.id, value)}
           onPickup={() => void app.actionHandlers.pickup(app.selectedDelivery!.id)}
           onStart={() => void app.actionHandlers.start(app.selectedDelivery!.id)}
@@ -51,6 +56,7 @@ export function App() {
           session={app.session}
           deliveries={app.deliveries}
           pendingActionCountByDelivery={app.pendingActionCountByDelivery}
+          blockedActionByDelivery={app.blockedActionByDelivery}
           blockedActionCount={app.blockedActions.length}
           lastSuccessfulSync={app.lastSuccessfulSync}
           bannerMessage={app.bannerMessage}
@@ -72,17 +78,17 @@ export default App;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: palette.appBackground,
   },
   centeredScreen: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f8fafc',
+    backgroundColor: palette.appBackground,
     gap: 12,
   },
   helperText: {
-    color: '#475569',
+    color: palette.textSubtle,
     fontSize: 15,
   },
 });

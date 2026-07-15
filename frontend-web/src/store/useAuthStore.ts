@@ -15,7 +15,7 @@ interface AuthState {
   logout: () => void;
 }
 
-const AUTH_STORAGE_KEY = 'delivery-platform-auth';
+const AUTH_STORAGE_KEY = 'rdp-auth';
 
 const getStoredAuth = (): Pick<AuthState, 'user' | 'token'> => {
   if (typeof window === 'undefined' || !window.localStorage) {

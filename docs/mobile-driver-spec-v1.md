@@ -1,7 +1,7 @@
 # Driver Mobile App Specification v1
 
 ## 1. Document metadata
-- Product: Delivery Platform - Driver mobile app
+- Product: ROBUST DELIVERY PLATFORM (RDP) - Driver mobile app
 - Version: v1.0
 - Date: 2026-07-15
 - Status: Approved v1 (Frozen)

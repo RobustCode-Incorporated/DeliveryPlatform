@@ -1,5 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import type { DriverDeliveryDto } from '../types/api';
+import type { DriverDeliveryDto, PendingAction } from '../types/api';
+import { palette, statusBadgeColors } from '../theme/palette';
 
 const quickFailureReasons = [
   'Client absent',
@@ -11,11 +12,15 @@ const quickFailureReasons = [
 interface DeliveryDetailScreenProps {
   delivery: DriverDeliveryDto;
   pendingActionCount: number;
+  blockedAction: PendingAction | null;
   failureDraft: string;
   bannerMessage: string | null;
   errorMessage: string | null;
   isSaving: boolean;
   onBack: () => void;
+  onRefreshServerState: () => void;
+  onRetryBlockedAction: () => void;
+  onDiscardBlockedAction: () => void;
   onFailureDraftChange: (value: string) => void;
   onPickup: () => void;
   onStart: () => void;
@@ -26,11 +31,15 @@ interface DeliveryDetailScreenProps {
 export function DeliveryDetailScreen({
   delivery,
   pendingActionCount,
+  blockedAction,
   failureDraft,
   bannerMessage,
   errorMessage,
   isSaving,
   onBack,
+  onRefreshServerState,
+  onRetryBlockedAction,
+  onDiscardBlockedAction,
   onFailureDraftChange,
   onPickup,
   onStart,
@@ -39,6 +48,8 @@ export function DeliveryDetailScreen({
 }: DeliveryDetailScreenProps) {
   const trimmedFailureDraft = failureDraft.trim();
   const isFailureDraftInvalid = !trimmedFailureDraft || trimmedFailureDraft.length > 180;
+  const isBlockedByConflict = blockedAction?.state === 'conflicted';
+  const isBlockedByFailure = blockedAction?.state === 'failed';
 
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -50,7 +61,7 @@ export function DeliveryDetailScreen({
         <Text style={styles.eyebrow}>Detail livraison</Text>
         <View style={styles.headerRow}>
           <Text style={styles.title}>Livraison #{delivery.id}</Text>
-          <Text style={styles.statusBadge}>{delivery.status}</Text>
+          <Text style={[styles.statusBadge, statusBadgeColors[delivery.status]]}>{delivery.status}</Text>
         </View>
 
         <Text style={styles.metaLine}>Retrait: {delivery.pickupAddress}</Text>
@@ -66,6 +77,34 @@ export function DeliveryDetailScreen({
 
       {bannerMessage ? <Text style={styles.successText}>{bannerMessage}</Text> : null}
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
+      {blockedAction ? (
+        <View style={[styles.recoveryPanel, isBlockedByConflict ? styles.recoveryConflict : styles.recoveryFailure]}>
+          <Text style={styles.recoveryPanelTitle}>
+            {isBlockedByConflict ? 'Conflit entre file locale et serveur' : 'Action en attente en echec'}
+          </Text>
+          <Text style={styles.recoveryPanelText}>
+            {isBlockedByConflict
+              ? 'Le serveur a change d etat avant la relecture. Actualisez d abord la livraison puis supprimez l action locale obsolete.'
+              : 'La reprise automatique a atteint sa limite. Vous pouvez reprogrammer l action ou la supprimer apres verification.'}
+          </Text>
+          {blockedAction.lastError ? <Text style={styles.recoveryError}>Derniere erreur: {blockedAction.lastError}</Text> : null}
+
+          <View style={styles.recoveryActions}>
+            <Pressable style={styles.ghostButton} onPress={onRefreshServerState}>
+              <Text style={styles.ghostButtonText}>Actualiser l etat serveur</Text>
+            </Pressable>
+            {isBlockedByFailure ? (
+              <Pressable style={styles.secondaryButton} onPress={onRetryBlockedAction}>
+                <Text style={styles.secondaryButtonText}>Reprogrammer l action</Text>
+              </Pressable>
+            ) : null}
+            <Pressable style={styles.secondaryButton} onPress={onDiscardBlockedAction}>
+              <Text style={styles.secondaryButtonText}>Supprimer l action locale</Text>
+            </Pressable>
+          </View>
+        </View>
+      ) : null}
 
       <View style={styles.actionGroup}>
         {delivery.status === 'ASSIGNED' ? (
@@ -131,18 +170,19 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 20,
     gap: 16,
+    backgroundColor: palette.appBackground,
   },
   backButton: {
     alignSelf: 'flex-start',
   },
   backButtonText: {
-    color: '#0f766e',
+    color: palette.primary,
     fontWeight: '700',
     fontSize: 14,
   },
   detailCard: {
     borderRadius: 24,
-    backgroundColor: '#ffffff',
+    backgroundColor: palette.card,
     padding: 20,
     gap: 10,
   },
@@ -150,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 1.4,
     textTransform: 'uppercase',
-    color: '#0f766e',
+    color: palette.textMuted,
     fontWeight: '700',
   },
   headerRow: {
@@ -161,14 +201,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: '700',
-    color: '#0f172a',
+    color: palette.textStrong,
     flex: 1,
   },
   statusBadge: {
     alignSelf: 'flex-start',
     borderRadius: 999,
-    backgroundColor: '#ecfeff',
-    color: '#155e75',
     paddingHorizontal: 12,
     paddingVertical: 6,
     fontSize: 12,
@@ -177,21 +215,21 @@ const styles = StyleSheet.create({
   },
   metaLine: {
     fontSize: 14,
-    color: '#334155',
+    color: palette.textSubtle,
     lineHeight: 20,
   },
   pendingText: {
     fontSize: 13,
-    color: '#b45309',
+    color: palette.warningText,
     fontWeight: '600',
   },
   successText: {
-    color: '#166534',
+    color: palette.successText,
     fontSize: 14,
     lineHeight: 20,
   },
   errorText: {
-    color: '#b91c1c',
+    color: palette.dangerText,
     fontSize: 14,
     lineHeight: 20,
   },
@@ -202,12 +240,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 16,
-    backgroundColor: '#0f766e',
+    backgroundColor: palette.primary,
     paddingVertical: 14,
     paddingHorizontal: 18,
   },
   primaryButtonText: {
-    color: '#ffffff',
+    color: palette.primaryText,
     fontWeight: '700',
     fontSize: 15,
   },
@@ -215,13 +253,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 16,
-    backgroundColor: '#dbeafe',
+    backgroundColor: palette.secondary,
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
   secondaryButtonText: {
-    color: '#1d4ed8',
+    color: palette.secondaryText,
     fontWeight: '700',
+    fontSize: 14,
+  },
+  ghostButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: palette.borderSoft,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  ghostButtonText: {
+    color: palette.textSubtle,
+    fontWeight: '600',
     fontSize: 14,
   },
   textArea: {
@@ -229,11 +281,11 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#cbd5e1',
-    backgroundColor: '#ffffff',
+    borderColor: palette.borderSoft,
+    backgroundColor: palette.card,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    color: '#0f172a',
+    color: palette.textStrong,
   },
   quickReasonRow: {
     flexDirection: 'row',
@@ -242,34 +294,63 @@ const styles = StyleSheet.create({
   },
   quickReasonChip: {
     borderRadius: 999,
-    backgroundColor: '#ecfeff',
+    backgroundColor: palette.secondary,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   quickReasonChipText: {
-    color: '#155e75',
+    color: palette.secondaryText,
     fontSize: 13,
     fontWeight: '600',
   },
   counterText: {
-    color: '#64748b',
+    color: palette.textMuted,
     fontSize: 12,
     textAlign: 'right',
   },
   counterTextError: {
-    color: '#b91c1c',
+    color: palette.dangerText,
     fontWeight: '700',
   },
   failurePanel: {
     gap: 10,
     borderRadius: 22,
-    backgroundColor: '#ffffff',
+    backgroundColor: palette.card,
     padding: 18,
+  },
+  recoveryPanel: {
+    borderRadius: 22,
+    padding: 18,
+    gap: 10,
+  },
+  recoveryConflict: {
+    backgroundColor: palette.dangerBg,
+  },
+  recoveryFailure: {
+    backgroundColor: palette.warningBg,
+  },
+  recoveryPanelTitle: {
+    color: palette.dangerText,
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  recoveryPanelText: {
+    color: palette.textSubtle,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  recoveryError: {
+    color: palette.dangerText,
+    fontSize: 12,
+    lineHeight: 18,
+  },
+  recoveryActions: {
+    gap: 10,
   },
   failureLabel: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#0f172a',
+    color: palette.textStrong,
   },
   buttonDisabled: {
     opacity: 0.6,

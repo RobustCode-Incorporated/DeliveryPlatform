@@ -1,11 +1,13 @@
 import { ActivityIndicator, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { getSyncStatus } from '../app/syncStatus';
-import type { DriverDeliveryDto, StoredSession } from '../types/api';
+import type { DriverDeliveryDto, PendingAction, StoredSession } from '../types/api';
+import { palette, statusBadgeColors } from '../theme/palette';
 
 interface DeliveryListScreenProps {
   session: StoredSession;
   deliveries: DriverDeliveryDto[];
   pendingActionCountByDelivery: Record<number, number>;
+  blockedActionByDelivery: Record<number, PendingAction>;
   blockedActionCount: number;
   lastSuccessfulSync: string | null;
   bannerMessage: string | null;
@@ -22,6 +24,7 @@ export function DeliveryListScreen({
   session,
   deliveries,
   pendingActionCountByDelivery,
+  blockedActionByDelivery,
   blockedActionCount,
   lastSuccessfulSync,
   bannerMessage,
@@ -34,11 +37,13 @@ export function DeliveryListScreen({
   onOpenDelivery,
 }: DeliveryListScreenProps) {
   const syncStatus = getSyncStatus(lastSuccessfulSync);
+  const conflictedCount = Object.values(blockedActionByDelivery).filter((action) => action.state === 'conflicted').length;
+  const failedCount = Object.values(blockedActionByDelivery).filter((action) => action.state === 'failed').length;
 
   return (
     <ScrollView
       contentContainerStyle={styles.contentContainer}
-      refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor="#0f766e" />}
+      refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={palette.primary} />}
     >
       <View style={styles.headerCard}>
         <Text style={styles.eyebrow}>Session active</Text>
@@ -77,6 +82,7 @@ export function DeliveryListScreen({
           <Text style={styles.warningText}>
             {blockedActionCount} action(s) exigent une revue manuelle avant la prochaine synchro automatique.
           </Text>
+          <Text style={styles.warningMeta}>Conflits: {conflictedCount} | Echecs reseau: {failedCount}</Text>
         </View>
       ) : null}
 
@@ -84,7 +90,7 @@ export function DeliveryListScreen({
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
       {isRefreshing && deliveries.length === 0 ? (
-        <ActivityIndicator size="large" color="#0f766e" />
+        <ActivityIndicator size="large" color={palette.primary} />
       ) : null}
 
       {deliveries.length === 0 && !isRefreshing ? (
@@ -95,6 +101,10 @@ export function DeliveryListScreen({
       ) : null}
 
       {deliveries.map((delivery) => (
+        (() => {
+          const blockedAction = blockedActionByDelivery[delivery.id];
+
+          return (
         <Pressable
           key={delivery.id}
           accessibilityRole="button"
@@ -103,7 +113,7 @@ export function DeliveryListScreen({
         >
           <View style={styles.deliveryHeader}>
             <Text style={styles.deliveryTitle}>Livraison #{delivery.id}</Text>
-            <Text style={styles.statusBadge}>{delivery.status}</Text>
+            <Text style={[styles.statusBadge, statusBadgeColors[delivery.status]]}>{delivery.status}</Text>
           </View>
           <Text style={styles.deliveryMeta}>Retrait: {delivery.pickupAddress}</Text>
           <Text style={styles.deliveryMeta}>Destination: {delivery.deliveryAddress}</Text>
@@ -111,8 +121,22 @@ export function DeliveryListScreen({
           {pendingActionCountByDelivery[delivery.id] ? (
             <Text style={styles.pendingText}>Action en attente: {pendingActionCountByDelivery[delivery.id]}</Text>
           ) : null}
+          {blockedAction ? (
+            <View style={[styles.recoveryCard, blockedAction.state === 'conflicted' ? styles.conflictCard : styles.failedCard]}>
+              <Text style={styles.recoveryTitle}>
+                {blockedAction.state === 'conflicted' ? 'Conflit detecte' : 'Reprise manuelle requise'}
+              </Text>
+              <Text style={styles.recoveryText}>
+                {blockedAction.state === 'conflicted'
+                  ? 'L etat du serveur ne correspond plus a l action locale. Ouvrez le detail pour actualiser puis supprimer l action obsolete.'
+                  : 'La derniere tentative a echoue apres plusieurs reprises. Ouvrez le detail pour reprogrammer ou supprimer cette action.'}
+              </Text>
+            </View>
+          ) : null}
           <Text style={styles.linkText}>Ouvrir le detail</Text>
         </Pressable>
+          );
+        })()
       ))}
     </ScrollView>
   );
@@ -122,10 +146,11 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 20,
     gap: 16,
+    backgroundColor: palette.appBackground,
   },
   headerCard: {
     borderRadius: 24,
-    backgroundColor: '#ffffff',
+    backgroundColor: palette.card,
     padding: 20,
     gap: 10,
   },
@@ -133,25 +158,25 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 1.4,
     textTransform: 'uppercase',
-    color: '#0f766e',
+    color: palette.textMuted,
     fontWeight: '700',
   },
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#0f172a',
+    color: palette.textStrong,
   },
   subtitle: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#475569',
+    color: palette.textSubtle,
   },
   syncText: {
     fontSize: 13,
-    color: '#64748b',
+    color: palette.textMuted,
   },
   syncTextStale: {
-    color: '#b45309',
+    color: palette.warningText,
     fontWeight: '600',
   },
   headerActions: {
@@ -163,12 +188,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 16,
-    backgroundColor: '#dbeafe',
+    backgroundColor: palette.secondary,
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
   secondaryButtonText: {
-    color: '#1d4ed8',
+    color: palette.secondaryText,
     fontWeight: '700',
     fontSize: 14,
   },
@@ -177,60 +202,65 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#cbd5e1',
+    borderColor: palette.borderSoft,
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
   ghostButtonText: {
-    color: '#334155',
+    color: palette.textSubtle,
     fontWeight: '600',
     fontSize: 14,
   },
   warningCard: {
     borderRadius: 18,
-    backgroundColor: '#fff7ed',
+    backgroundColor: palette.warningBg,
     padding: 16,
     gap: 6,
   },
   warningTitle: {
-    color: '#9a3412',
+    color: palette.warningText,
     fontSize: 15,
     fontWeight: '700',
   },
   warningText: {
-    color: '#9a3412',
+    color: palette.warningText,
     fontSize: 13,
     lineHeight: 20,
   },
+  warningMeta: {
+    color: palette.warningText,
+    fontSize: 12,
+    fontWeight: '700',
+  },
   successText: {
-    color: '#166534',
+    color: palette.successText,
     fontSize: 14,
     lineHeight: 20,
   },
   errorText: {
-    color: '#b91c1c',
+    color: palette.dangerText,
     fontSize: 14,
     lineHeight: 20,
   },
   emptyCard: {
     borderRadius: 22,
-    backgroundColor: '#ffffff',
+    backgroundColor: palette.card,
     padding: 20,
     gap: 6,
   },
   emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0f172a',
+    color: palette.textStrong,
   },
   emptyText: {
     fontSize: 14,
-    color: '#64748b',
+    color: palette.textMuted,
     lineHeight: 20,
   },
   deliveryCard: {
     borderRadius: 22,
-    backgroundColor: '#ffffff',
+    backgroundColor: palette.card,
     padding: 18,
     gap: 10,
   },
@@ -242,14 +272,12 @@ const styles = StyleSheet.create({
   deliveryTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0f172a',
+    color: palette.textStrong,
     flex: 1,
   },
   statusBadge: {
     alignSelf: 'flex-start',
     borderRadius: 999,
-    backgroundColor: '#ecfeff',
-    color: '#155e75',
     paddingHorizontal: 12,
     paddingVertical: 6,
     fontSize: 12,
@@ -258,16 +286,37 @@ const styles = StyleSheet.create({
   },
   deliveryMeta: {
     fontSize: 14,
-    color: '#334155',
+    color: palette.textSubtle,
     lineHeight: 20,
   },
   pendingText: {
     fontSize: 13,
-    color: '#b45309',
+    color: palette.warningText,
     fontWeight: '600',
   },
+  recoveryCard: {
+    borderRadius: 16,
+    padding: 12,
+    gap: 6,
+  },
+  conflictCard: {
+    backgroundColor: palette.dangerBg,
+  },
+  failedCard: {
+    backgroundColor: palette.warningBg,
+  },
+  recoveryTitle: {
+    color: palette.dangerText,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  recoveryText: {
+    color: palette.textSubtle,
+    fontSize: 12,
+    lineHeight: 18,
+  },
   linkText: {
-    color: '#0f766e',
+    color: palette.primary,
     fontWeight: '700',
     fontSize: 14,
   },

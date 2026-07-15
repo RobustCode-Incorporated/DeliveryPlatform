@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.robustcode</groupId>
-	<artifactId>delivery-platform</artifactId>
+	<artifactId>robust-delivery-platform</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>

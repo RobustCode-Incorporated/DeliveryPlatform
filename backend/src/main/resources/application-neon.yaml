@@ -15,4 +15,8 @@ spring:
     locations: classpath:db/migration-postgresql
 
 server:
-  port: 8080
+  port: ${PORT:8080}
+
+app:
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:5173}
