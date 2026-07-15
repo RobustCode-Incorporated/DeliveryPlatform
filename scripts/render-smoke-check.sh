@@ -3,7 +3,7 @@ set -euo pipefail
 
 if [[ $# -lt 2 ]]; then
   echo "Usage: $0 <BACKEND_URL> <FRONTEND_URL>"
-  echo "Example: $0 https://delivery-platform-backend.onrender.com https://delivery-platform-frontend.onrender.com"
+  echo "Example: $0 https://robust-delivery-platform-backend.onrender.com https://robust-delivery-platform-frontend.onrender.com"
   exit 1
 fi
 

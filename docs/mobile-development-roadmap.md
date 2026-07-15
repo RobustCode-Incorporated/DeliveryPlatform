@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap translates the approved driver mobile specification in [docs/mobile-driver-spec-v1.md](docs/mobile-driver-spec-v1.md) into an implementation-tracking document for the current Expo app in [mobile/driver-app](mobile/driver-app).
+This roadmap translates the approved driver mobile specification in [docs/mobile-driver-spec-v1.md](docs/mobile-driver-spec-v1.md) into an implementation-tracking document for the current Expo app in [RDP-mobile/driver-app](RDP-mobile/driver-app).
 
 Status legend:
 - DONE: implemented and validated in the current codebase
@@ -27,8 +27,8 @@ Status legend:
 - DONE: focused unit and screen tests for queue logic and failure UX
 
 ### Partially complete
-- IN PROGRESS: queue retry strategy is bounded, but exponential backoff is not yet implemented
-- IN PROGRESS: conflict handling marks actions as conflicted, but the recovery UX can be clearer
+- DONE: queue retry strategy is bounded and now uses exponential backoff scheduling
+- DONE: conflict handling now exposes per-delivery recovery guidance with refresh, retry, and discard actions
 - IN PROGRESS: failure and offline UX exists, but acceptance-criteria evidence is incomplete
 - IN PROGRESS: accessibility has baseline control semantics, but no formal audit or checklist evidence yet
 
@@ -52,12 +52,12 @@ Scope:
 - online delivery transitions
 
 Evidence in code:
-- [mobile/driver-app/src/api/auth.ts](mobile/driver-app/src/api/auth.ts)
-- [mobile/driver-app/src/api/driver.ts](mobile/driver-app/src/api/driver.ts)
-- [mobile/driver-app/src/app/useDriverApp.ts](mobile/driver-app/src/app/useDriverApp.ts)
-- [mobile/driver-app/src/screens/LoginScreen.tsx](mobile/driver-app/src/screens/LoginScreen.tsx)
-- [mobile/driver-app/src/screens/DeliveryListScreen.tsx](mobile/driver-app/src/screens/DeliveryListScreen.tsx)
-- [mobile/driver-app/src/screens/DeliveryDetailScreen.tsx](mobile/driver-app/src/screens/DeliveryDetailScreen.tsx)
+- [RDP-mobile/driver-app/src/api/auth.ts](RDP-mobile/driver-app/src/api/auth.ts)
+- [RDP-mobile/driver-app/src/api/driver.ts](RDP-mobile/driver-app/src/api/driver.ts)
+- [RDP-mobile/driver-app/src/app/useDriverApp.ts](RDP-mobile/driver-app/src/app/useDriverApp.ts)
+- [RDP-mobile/driver-app/src/screens/LoginScreen.tsx](RDP-mobile/driver-app/src/screens/LoginScreen.tsx)
+- [RDP-mobile/driver-app/src/screens/DeliveryListScreen.tsx](RDP-mobile/driver-app/src/screens/DeliveryListScreen.tsx)
+- [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.tsx](RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.tsx)
 
 ### Phase M2: Offline Continuity and Queue Safety
 Status: IN PROGRESS
@@ -71,15 +71,13 @@ Completed in this phase:
 - stale cache messaging
 
 Remaining in this phase:
-- exponential backoff policy
-- stronger conflict-recovery UX copy and flows
 - richer state merge evidence per acceptance criteria
 
 Evidence in code:
-- [mobile/driver-app/src/app/useDriverApp.ts](mobile/driver-app/src/app/useDriverApp.ts)
-- [mobile/driver-app/src/app/offlineQueue.ts](mobile/driver-app/src/app/offlineQueue.ts)
-- [mobile/driver-app/src/app/syncStatus.ts](mobile/driver-app/src/app/syncStatus.ts)
-- [mobile/driver-app/src/lib/session.ts](mobile/driver-app/src/lib/session.ts)
+- [RDP-mobile/driver-app/src/app/useDriverApp.ts](RDP-mobile/driver-app/src/app/useDriverApp.ts)
+- [RDP-mobile/driver-app/src/app/offlineQueue.ts](RDP-mobile/driver-app/src/app/offlineQueue.ts)
+- [RDP-mobile/driver-app/src/app/syncStatus.ts](RDP-mobile/driver-app/src/app/syncStatus.ts)
+- [RDP-mobile/driver-app/src/lib/session.ts](RDP-mobile/driver-app/src/lib/session.ts)
 
 ### Phase M3: Hardening and Release Evidence
 Status: TODO
@@ -116,32 +114,35 @@ Scope:
 - AC-DM-040: DONE
 - AC-DM-041: DONE
 - AC-DM-042: IN PROGRESS
-  - FIFO replay exists, but full release-grade evidence and backoff behavior are still incomplete.
+  - FIFO replay and exponential backoff now exist, but full release-grade evidence is still incomplete.
 
 ## Test Coverage Snapshot
 
 Current passing tests:
-- [mobile/driver-app/src/app/offlineQueue.test.ts](mobile/driver-app/src/app/offlineQueue.test.ts)
-- [mobile/driver-app/src/app/syncStatus.test.ts](mobile/driver-app/src/app/syncStatus.test.ts)
-- [mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx](mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx)
+- [RDP-mobile/driver-app/src/app/offlineQueue.test.ts](RDP-mobile/driver-app/src/app/offlineQueue.test.ts)
+- [RDP-mobile/driver-app/src/app/syncStatus.test.ts](RDP-mobile/driver-app/src/app/syncStatus.test.ts)
+- [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx](RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx)
+- [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx)
+
+QA evidence tracker:
+- [docs/mobile-driver-qa-evidence-v1.md](docs/mobile-driver-qa-evidence-v1.md)
 
 Recommended next tests:
-- integration coverage for login to list load
-- integration coverage for offline queue creation and replay
-- integration coverage for unauthorized-session reset on 401
+- integration coverage for replay conflict branches and manual retry/discard outcomes
 - end-to-end smoke flow on Android using the seeded driver account
 
 ## Recommended Next Iterations
 
 ### Iteration 1
-- add seeded deliveries and orders in Neon for driver workflow testing
-- verify the full happy path manually on Android and iOS
-- capture QA evidence against AC-DM-001, AC-DM-010, AC-DM-020, AC-DM-021, AC-DM-022, and AC-DM-030
+- DONE: add seeded deliveries and orders in Neon for driver workflow testing
+- DONE: add a repeatable workflow reset helper in [scripts/reset-mobile-driver-workflow.sh](scripts/reset-mobile-driver-workflow.sh)
+- DONE: verify the full happy path manually on Android for pickup/start/complete/fail transitions
+- DONE: capture QA evidence against AC-DM-001, AC-DM-010, AC-DM-020, AC-DM-021, AC-DM-022, and AC-DM-030
 
 ### Iteration 2
-- implement queue replay backoff
-- improve conflict UX with explicit recovery guidance
-- add integration coverage around replay and unauthorized reset
+- DONE: implement queue replay backoff
+- DONE: improve conflict UX with explicit recovery guidance
+- DONE: add integration coverage around replay and unauthorized reset in [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx)
 
 ### Iteration 3
 - add telemetry hooks
@@ -154,5 +155,18 @@ Mobile v1 should be considered release-ready only when all of the following are 
 - all non-negotiable requirements in [docs/mobile-driver-spec-v1.md](docs/mobile-driver-spec-v1.md) are satisfied;
 - AC-DM-001 through AC-DM-042 have explicit evidence;
 - offline replay behavior is bounded, conflict-safe, and user-visible;
-- seeded backend data allows repeatable manual validation;
+- seeded backend data allows repeatable manual validation, now supported by [scripts/reset-mobile-driver-workflow.sh](scripts/reset-mobile-driver-workflow.sh);
 - the app passes TypeScript checks and mobile test suite validation.
+
+## Live Progress Notes
+
+- 2026-07-15: PostgreSQL migration V3 seeded realistic mobile workflow data in Neon.
+- 2026-07-15: Live backend verification returned three deliveries for `driver@test.com` in `ASSIGNED`, `PICKED_UP`, and `IN_TRANSIT` states.
+- 2026-07-15: Android build/install completed successfully on the `Pixel_10_Pro_XL` emulator against the live backend.
+- 2026-07-15: Offline queue replay now uses exponential backoff scheduling and passing Jest coverage.
+- 2026-07-15: Blocked queued actions now expose per-delivery recovery guidance and actions in the mobile UI.
+- 2026-07-15: QA evidence tracking started in [docs/mobile-driver-qa-evidence-v1.md](docs/mobile-driver-qa-evidence-v1.md) using the live Neon dataset.
+- 2026-07-15: Added [scripts/reset-mobile-driver-workflow.sh](scripts/reset-mobile-driver-workflow.sh) plus [scripts/reset-mobile-driver-workflow.sql](scripts/reset-mobile-driver-workflow.sql) to restore the mixed-state QA dataset on demand.
+- 2026-07-15: Live backend verification again returned `ASSIGNED`, `PICKED_UP`, and `IN_TRANSIT` deliveries for `driver@test.com` after running the reset helper.
+- 2026-07-15: Clean Android walkthrough captured transition evidence for pickup (`#1`), start+complete (`#2`), and fail (`#3`) with artifacts under [docs/qa](docs/qa).
+- 2026-07-15: Added [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx) covering unauthorized session reset and queued replay cleanup.

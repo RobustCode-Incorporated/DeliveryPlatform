@@ -9,9 +9,9 @@ The current implementation is focused on three tracks:
 
 ## Workspace Structure
 
-- [backend](backend): Spring Boot API, security, Flyway migrations, and delivery domain logic
-- [frontend-web](frontend-web): Vite + React web application for admin, restaurant, and driver dashboards
-- [mobile/driver-app](mobile/driver-app): Expo React Native driver mobile app
+- [RDP-backend](RDP-backend): Spring Boot API, security, Flyway migrations, and delivery domain logic
+- [RDP-frontend](RDP-frontend): Vite + React web application for admin, restaurant, and driver dashboards
+- [RDP-mobile/driver-app](RDP-mobile/driver-app): Expo React Native driver mobile app
 - [docs](docs): roadmap, specification, and review artifacts
 - [docker/docker-compose.yml](docker/docker-compose.yml): local infrastructure bootstrap
 
@@ -48,8 +48,8 @@ The current implementation is focused on three tracks:
   - `PUT /api/deliveries/{id}/start`
   - `PUT /api/deliveries/{id}/complete`
   - `PUT /api/deliveries/{id}/fail`
-- PostgreSQL support for Neon is configured in [backend/src/main/resources/application-neon.yaml](backend/src/main/resources/application-neon.yaml).
-- Schema bootstrap and QA seed data are managed in [backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql](backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql), [backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql](backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql), and [backend/src/main/resources/db/migration-postgresql/V3__seed_mobile_driver_workflow_data.sql](backend/src/main/resources/db/migration-postgresql/V3__seed_mobile_driver_workflow_data.sql).
+- PostgreSQL support for Neon is configured in [RDP-backend/src/main/resources/application-neon.yaml](RDP-backend/src/main/resources/application-neon.yaml).
+- Schema bootstrap and QA seed data are managed in [RDP-backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql](RDP-backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql), [RDP-backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql](RDP-backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql), and [RDP-backend/src/main/resources/db/migration-postgresql/V3__seed_mobile_driver_workflow_data.sql](RDP-backend/src/main/resources/db/migration-postgresql/V3__seed_mobile_driver_workflow_data.sql).
 
 ### Web Frontend
 - Admin, restaurant, and driver workflows are implemented.
@@ -102,10 +102,10 @@ The current app partially covers or still lacks these spec areas:
 ## Validation Snapshot
 
 Recent successful checks include:
-- `mvn -q -DskipTests compile` in [backend](backend)
-- `npm run build` and `npm run test` in [frontend-web](frontend-web)
-- `npx tsc --noEmit` in [mobile/driver-app](mobile/driver-app)
-- `npm test -- --runInBand` in [mobile/driver-app](mobile/driver-app)
+- `mvn -q -DskipTests compile` in [RDP-backend](RDP-backend)
+- `npm run build` and `npm run test` in [RDP-frontend](RDP-frontend)
+- `npx tsc --noEmit` in [RDP-mobile/driver-app](RDP-mobile/driver-app)
+- `npm test -- --runInBand` in [RDP-mobile/driver-app](RDP-mobile/driver-app)
 - live login verification for seeded admin, restaurant, and driver accounts against the backend auth API
 
 ## Documents
@@ -119,14 +119,14 @@ Recent successful checks include:
 ## Getting Started
 
 ### Backend
-From [backend](backend):
+From [RDP-backend](RDP-backend):
 
 ```bash
 mvn -q -DskipTests compile
 ```
 
 ### Web Frontend
-From [frontend-web](frontend-web):
+From [RDP-frontend](RDP-frontend):
 
 ```bash
 npm install
@@ -134,7 +134,7 @@ npm run dev
 ```
 
 ### Mobile Driver App
-From [mobile/driver-app](mobile/driver-app):
+From [RDP-mobile/driver-app](RDP-mobile/driver-app):
 
 ```bash
 npm install
@@ -183,8 +183,8 @@ Frontend relies on:
 - `VITE_API_BASE_URL` (provided by Blueprint linking)
 
 Reference templates:
-- [backend/.env.render.example](backend/.env.render.example)
-- [frontend-web/.env.example](frontend-web/.env.example)
+- [RDP-backend/.env.render.example](RDP-backend/.env.render.example)
+- [RDP-frontend/.env.example](RDP-frontend/.env.example)
 
 ### Manual Render Setup (Without Blueprint)
 
@@ -198,7 +198,7 @@ If you prefer manual service creation:
 
 - Frontend service:
   - Environment: Static Site
-  - Root directory: `frontend-web`
+  - Root directory: `RDP-frontend`
   - Build command: `npm install && npm run build`
   - Publish directory: `dist`
   - Set `VITE_API_BASE_URL` to backend public URL
