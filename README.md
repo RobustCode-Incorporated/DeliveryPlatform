@@ -1,168 +1,153 @@
-# DELIVERY PLATFORM
-# 📦 Au Bois d'Ébène - Delivery Management Platform
+# Delivery Platform
 
-A professional-grade delivery management platform engineered to optimize logistics for the "Au Bois d'Ébène" restaurant. The system facilitates seamless synchronization between Odoo ERP and a dedicated mobile application for delivery drivers, ensuring real-time order tracking and operational efficiency.
+Delivery Platform is a multi-surface logistics product with a Spring Boot backend, a React web frontend, and a native Expo driver application.
 
----
+The current implementation is focused on three tracks:
+- backend contracts and workflow rules for orders, deliveries, restaurants, and drivers;
+- web workflows for admin, restaurant, and driver operations;
+- a DRIVER-only mobile app aligned with the approved driver specification in [docs/mobile-driver-spec-v1.md](docs/mobile-driver-spec-v1.md).
 
-## 🚀 Project Vision
-Built using a **Specification-Driven Development** approach and a **Clean Hexagonal Architecture**, this project is designed for long-term maintainability, high testability, and robust integration. Our focus is on delivering a scalable solution that bridges the gap between business processes and technical execution.
+## Workspace Structure
 
-## 🛠️ Tech Stack
+- [backend](backend): Spring Boot API, security, Flyway migrations, and delivery domain logic
+- [frontend-web](frontend-web): Vite + React web application for admin, restaurant, and driver dashboards
+- [mobile/driver-app](mobile/driver-app): Expo React Native driver mobile app
+- [docs](docs): roadmap, specification, and review artifacts
+- [docker/docker-compose.yml](docker/docker-compose.yml): local infrastructure bootstrap
 
-### Backend
-*   **Java 21** & **Spring Boot 3**
-*   **Spring Security** & **JWT** (Stateless Authentication)
-*   **Spring Data JPA** (Hibernate)
-*   **MySQL** with **Flyway** for automated database versioning
-*   **Lombok** & **Jakarta Validation**
-*   **Swagger/OpenAPI** (Interactive API Documentation)
-
-### Architecture & Methodology
-*   **Hexagonal Architecture (Ports & Adapters):** Strict isolation of the core business domain from external frameworks.
-*   **Domain-Driven Design (DDD):** Modeling focused on real-world business constraints.
-*   **TDD (Test-Driven Development):** Rigorous testing cycles using JUnit 5, Mockito, and MockMvc.
-*   **SOLID Principles:** Ensuring a codebase that is clean, maintainable, and modular.
-
----
-
-## 🏗️ Architectural Overview
-
-The system employs a layered structure to ensure technological independence:
-
-1.  **Domain:** Pure business logic, free from framework dependencies.
-2.  **Application:** Orchestration of use cases.
-3.  **Infrastructure:** Technical implementation (Persistence, Security, Odoo Integration).
-4.  **Presentation:** Secure REST API entry points.
-
----
-
-## 🔐 Security & Auth
-The system utilizes **JSON Web Tokens (JWT)** with a robust refresh token mechanism, balancing a seamless mobile user experience with high-security standards (Role-Based Access Control - RBAC).
-
-## 🖥️ Frontend Progress
-The web frontend has started to move from a prototype into a structured application.
-
-Completed so far:
-- a reusable authenticated app shell for admin and restaurant users;
-- persisted authentication state in `localStorage`;
-- role-based redirects after login and from the root route;
-- refactored admin and restaurant dashboards to use the shared shell.
-- first admin overview slice with restaurant, driver, and order summaries.
-- admin search and status filters for restaurants, drivers, and orders.
-- admin detail drawer layer for restaurants, drivers, and orders.
-- API-backed admin data loading for restaurants, drivers, and orders, plus driver assignment for orders.
-- loading/error hardening for admin API failures with retry support.
-- Vitest coverage for admin loading, fallback error handling, and assign-driver flow.
-- restaurant workflow page with pending orders, workflow actions, drawer details, fallback data, and Vitest coverage.
-- restaurant delivery handoff view with status history timeline and backend history endpoint.
-- driver delivery dashboard with pickup, transit, and completion actions backed by the delivery contract.
-- driver failure-handling flow with reason capture and backend fail-transition endpoint integration.
-- global toast notifications and a standardized async error boundary wired across restaurant and driver workflows.
-- accessibility hardening for detail drawers with dialog semantics, keyboard escape handling, and focus trap behavior.
-- broader restaurant-to-driver lifecycle coverage in frontend workflow tests.
-
-Next frontend step:
-- move into release hardening tasks: CI pipeline checks, deployment checklist, and final UX polish.
-
-## 📱 Mobile Progress
-The driver mobile application is now initialized as a native Expo project and connected to the backend delivery workflow.
-
-Completed so far:
-- Expo driver app scaffold with native iOS and Android projects;
-- successful native iOS simulator and Android emulator builds;
-- backend login integration with secure session persistence;
-- real driver delivery loading and transition actions for pickup, start, complete, and fail flows;
-- automatic session-expiry handling on unauthorized API responses;
-- first mobile screen split aligned to the approved v1 spec: login, delivery list, and delivery detail;
-- offline continuity slice with cached deliveries, persisted pending action queue, replay on refresh/resume, visible pending/offline indicators, and manual retry/discard handling for blocked queue items.
-
-Next mobile step:
-- stabilize automated mobile tests and then complete offline conflict and retry UX hardening from the approved spec.
-
----
-
-## 📊 Roadmap
-*   **Sprint 1:** Authentication & Security (JWT).
-*   **Sprint 2:** Delivery Management (Mission retrieval).
-*   **Sprint 3:** Order Details & Mapping.
-*   **Sprint 4:** Delivery Workflows (Accept, En Route, Delivered, Failed).
-*   **Sprint 5:** Bidirectional Synchronization with **Odoo ERP**.
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-*   Java 21
-*   Docker & Docker Compose
-*   Maven 3.x
-
-### Setup
-1. Clone the repository:
-   ```bash
-   git clone [YOUR_REPO_URL]
-
-   # 📦 Au Bois d'Ébène - Delivery Management Platform
-
-A professional-grade delivery management platform engineered to optimize logistics for the "Au Bois d'Ébène" restaurant. The system facilitates seamless synchronization between Odoo ERP and a dedicated mobile application for delivery drivers, ensuring real-time order tracking and operational efficiency.
-
----
-
-## 🚀 Project Vision
-Built using a **Specification-Driven Development** approach and a **Clean Hexagonal Architecture**, this project is designed for long-term maintainability, high testability, and robust integration. Our focus is on delivering a scalable solution that bridges the gap between business processes and technical execution.
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
-*   **Java 21** & **Spring Boot 3**
-*   **Spring Security** & **JWT** (Stateless Authentication)
-*   **Spring Data JPA** (Hibernate)
-*   **MySQL** with **Flyway** for automated database versioning
-*   **Lombok** & **Jakarta Validation**
-*   **Swagger/OpenAPI** (Interactive API Documentation)
+- Java 21
+- Spring Boot 3.5
+- Spring Security + JWT
+- Spring Data JPA + Hibernate
+- Flyway
+- MySQL baseline support plus Neon PostgreSQL runtime profile
 
-### Architecture & Methodology
-*   **Hexagonal Architecture (Ports & Adapters):** Strict isolation of the core business domain from external frameworks.
-*   **Domain-Driven Design (DDD):** Modeling focused on real-world business constraints.
-*   **TDD (Test-Driven Development):** Rigorous testing cycles using JUnit 5, Mockito, and MockMvc.
-*   **SOLID Principles:** Ensuring a codebase that is clean, maintainable, and modular.
+### Web Frontend
+- React
+- TypeScript
+- Vite
+- Vitest + Testing Library
 
----
+### Mobile
+- Expo SDK 57
+- React Native 0.86
+- Axios
+- Expo SecureStore
+- Jest + React Native Testing Library
 
-## 🏗️ Architectural Overview
+## Current Status
 
-The system employs a layered structure to ensure technological independence:
+### Backend
+- JWT authentication is active for web and mobile clients.
+- Driver delivery endpoints are live:
+  - `GET /api/deliveries/me`
+  - `PUT /api/deliveries/{id}/pickup`
+  - `PUT /api/deliveries/{id}/start`
+  - `PUT /api/deliveries/{id}/complete`
+  - `PUT /api/deliveries/{id}/fail`
+- PostgreSQL support for Neon is configured in [backend/src/main/resources/application-neon.yaml](backend/src/main/resources/application-neon.yaml).
+- Schema bootstrap and QA seed data are managed in [backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql](backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql) and [backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql](backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql).
 
-1.  **Domain:** Pure business logic, free from framework dependencies.
-2.  **Application:** Orchestration of use cases.
-3.  **Infrastructure:** Technical implementation (Persistence, Security, Odoo Integration).
-4.  **Presentation:** Secure REST API entry points.
+### Web Frontend
+- Admin, restaurant, and driver workflows are implemented.
+- Shared authenticated shell, role-based redirects, async error boundary, and toast feedback are in place.
+- Restaurant-to-driver lifecycle coverage exists in the web test suite.
 
----
+### Mobile Driver App
+- Spec baseline: [docs/mobile-driver-spec-v1.md](docs/mobile-driver-spec-v1.md)
+- Review checklist: [docs/mobile-driver-spec-review-checklist-v1.md](docs/mobile-driver-spec-review-checklist-v1.md)
+- Roadmap: [docs/mobile-development-roadmap.md](docs/mobile-development-roadmap.md)
 
-## 🔐 Security & Auth
-The system utilizes **JSON Web Tokens (JWT)** with a robust refresh token mechanism, balancing a seamless mobile user experience with high-security standards (Role-Based Access Control - RBAC).
+Implemented today in the mobile app:
+- driver login against the real backend auth API;
+- role gate that allows only DRIVER sessions into the app workspace;
+- secure session persistence with restore on app restart;
+- assigned delivery list from `GET /api/deliveries/me`;
+- delivery detail screen with pickup, start, complete, and fail actions;
+- failure reason capture with quick reason chips and max-length guardrails;
+- offline cache of the last successful list response;
+- queued offline transition actions with replay on refresh and app resume;
+- blocked action visibility plus manual retry and discard actions;
+- pull-to-refresh and cache freshness messaging;
+- focused Jest coverage for queue logic, sync freshness, and failure-detail behavior.
 
----
+Still pending on the mobile track:
+- telemetry events from the approved spec;
+- full QA evidence for AC-DM-001 through AC-DM-042;
+- integration and end-to-end workflow automation;
+- localization extraction for all user-facing strings;
+- deeper conflict UX polish and optional order-history enhancement.
 
-## 📊 Roadmap
-*   **Sprint 1:** Authentication & Security (JWT).
-*   **Sprint 2:** Delivery Management (Mission retrieval).
-*   **Sprint 3:** Order Details & Mapping.
-*   **Sprint 4:** Delivery Workflows (Accept, En Route, Delivered, Failed).
-*   **Sprint 5:** Bidirectional Synchronization with **Odoo ERP**.
+## Mobile Spec Audit Summary
 
----
+The current app matches these major areas of the approved driver spec:
+- authentication and DRIVER-only role gate;
+- delivery list and detail navigation;
+- workflow transitions and fail flow;
+- offline cache and persisted pending queue;
+- retry and blocked-action handling;
+- secure token storage.
 
-## 🚀 Getting Started
+The current app partially covers or still lacks these spec areas:
+- exponential backoff is not yet implemented for queued action replay;
+- telemetry events are not yet emitted;
+- accessibility and localization are not yet fully formalized as release evidence;
+- full integration and end-to-end acceptance coverage is still pending.
 
-### Prerequisites
-*   Java 21
-*   Docker & Docker Compose
-*   Maven 3.x
+## Validation Snapshot
 
-### Setup
-1. Clone the repository:
-   ```bash
-   git clone [YOUR_REPO_URL]
+Recent successful checks include:
+- `mvn -q -DskipTests compile` in [backend](backend)
+- `npm run build` and `npm run test` in [frontend-web](frontend-web)
+- `npx tsc --noEmit` in [mobile/driver-app](mobile/driver-app)
+- `npm test -- --runInBand` in [mobile/driver-app](mobile/driver-app)
+- live login verification for seeded admin, restaurant, and driver accounts against the backend auth API
+
+## Documents
+
+- [docs/frontend-roadmap.md](docs/frontend-roadmap.md)
+- [docs/mobile-driver-spec-v1.md](docs/mobile-driver-spec-v1.md)
+- [docs/mobile-driver-spec-review-checklist-v1.md](docs/mobile-driver-spec-review-checklist-v1.md)
+- [docs/mobile-development-roadmap.md](docs/mobile-development-roadmap.md)
+
+## Getting Started
+
+### Backend
+From [backend](backend):
+
+```bash
+mvn -q -DskipTests compile
+```
+
+### Web Frontend
+From [frontend-web](frontend-web):
+
+```bash
+npm install
+npm run dev
+```
+
+### Mobile Driver App
+From [mobile/driver-app](mobile/driver-app):
+
+```bash
+npm install
+npm start
+```
+
+For native builds:
+
+```bash
+npm run android
+npm run ios
+```
+
+## Next Focus
+
+The mobile work is now in hardening mode. The highest-value next items are:
+- seed realistic deliveries and orders for manual end-to-end mobile testing;
+- implement telemetry and acceptance-evidence coverage from the approved spec;
+- complete queue replay hardening and remaining release-gate validation.
