@@ -1,6 +1,9 @@
 package com.robustcode.delivery.driver.service;
 
 
+import java.util.List;
+
+
 import com.robustcode.delivery.driver.domain.Driver;
 import com.robustcode.delivery.driver.dto.CreateDriverRequest;
 import com.robustcode.delivery.driver.dto.DriverResponse;
@@ -170,13 +173,23 @@ public class DriverService {
 
         }
 
-
-
         return mapToResponse(
                 user.getDriver()
         );
 
     }
+
+
+
+        @Transactional(readOnly = true)
+        public List<DriverResponse> findAll(){
+
+                return driverRepository.findAll()
+                                .stream()
+                                .map(this::mapToResponse)
+                                .toList();
+
+        }
 
 
 

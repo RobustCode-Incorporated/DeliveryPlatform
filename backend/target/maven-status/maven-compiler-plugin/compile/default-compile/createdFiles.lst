@@ -11,6 +11,7 @@ com/robustcode/delivery/security/PasswordGenerator.class
 com/robustcode/delivery/user/domain/User$UserBuilder.class
 com/robustcode/delivery/driver/domain/Driver$DriverBuilder.class
 com/robustcode/delivery/driver/repository/DriverRepository.class
+com/robustcode/delivery/order/dto/OrderStatusHistoryResponse.class
 com/robustcode/delivery/user/repository/UserRepository.class
 com/robustcode/delivery/security/JwtService.class
 com/robustcode/delivery/order/dto/OrderResponse.class
@@ -21,6 +22,7 @@ com/robustcode/delivery/auth/dto/RegisterRestaurantRequest.class
 com/robustcode/delivery/config/SecurityConfig.class
 com/robustcode/delivery/driver/dto/CreateDriverRequest.class
 com/robustcode/delivery/delivery/domain/Delivery.class
+com/robustcode/delivery/delivery/dto/FailDeliveryRequest.class
 com/robustcode/delivery/vehicle/domain/Vehicle$VehicleBuilder.class
 com/robustcode/delivery/restaurant/controller/RestaurantController.class
 com/robustcode/delivery/driver/domain/Driver$AvailabilityStatus.class

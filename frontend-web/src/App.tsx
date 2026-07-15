@@ -1,28 +1,31 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from './routes/ProtectedRoute';
-
-// Pages temporaires (nous les créerons plus tard)
-const Login = () => <div className="p-10">Page de Login (A venir)</div>;
-const AdminDashboard = () => <div className="p-10">Dashboard ADMIN</div>;
-const RestaurantDashboard = () => <div className="p-10">Dashboard RESTAURANT</div>;
+import { RoleRedirect } from './routes/RoleRedirect';
+import { Login } from './pages/auth/Login';
+import { RestaurantDashboard } from './pages/restaurant/RestaurantDashboard';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { DriverDashboard } from './pages/driver/DriverDashboard';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<RoleRedirect />} />
         
-        {/* Routes protégées pour ADMIN */}
         <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
           <Route path="/admin" element={<AdminDashboard />} />
         </Route>
 
-        {/* Routes protégées pour RESTAURANT */}
         <Route element={<ProtectedRoute allowedRoles={['RESTAURANT']} />}>
           <Route path="/restaurant" element={<RestaurantDashboard />} />
         </Route>
 
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route element={<ProtectedRoute allowedRoles={['DRIVER']} />}>
+          <Route path="/driver" element={<DriverDashboard />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

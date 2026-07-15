@@ -12,6 +12,7 @@ import com.robustcode.delivery.order.domain.Order;
 import com.robustcode.delivery.order.domain.OrderStatusHistory;
 import com.robustcode.delivery.order.dto.CreateOrderRequest;
 import com.robustcode.delivery.order.dto.OrderResponse;
+import com.robustcode.delivery.order.dto.OrderStatusHistoryResponse;
 import com.robustcode.delivery.order.repository.OrderRepository;
 import com.robustcode.delivery.order.repository.OrderStatusHistoryRepository;
 import com.robustcode.delivery.restaurant.domain.Restaurant;
@@ -102,7 +103,6 @@ public class OrderService {
                 .deliveryAddress(request.deliveryAddress())
 
                 .build();
-
 
 
         Order savedOrder =
@@ -530,5 +530,24 @@ public class OrderService {
                 .toList();
 
     }
+
+
+
+        @Transactional(readOnly = true)
+        public List<OrderStatusHistoryResponse> getOrderStatusHistory(
+                        Long orderId
+        ){
+
+                return orderStatusHistoryRepository.findByOrderId(orderId)
+
+                                .stream()
+
+                                .sorted((left, right) -> left.getCreatedAt().compareTo(right.getCreatedAt()))
+
+                                .map(OrderStatusHistoryResponse::from)
+
+                                .toList();
+
+        }
 
 }

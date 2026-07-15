@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.robustcode.delivery.order.dto.CreateOrderRequest;
 import com.robustcode.delivery.order.dto.OrderResponse;
+import com.robustcode.delivery.order.dto.OrderStatusHistoryResponse;
 import com.robustcode.delivery.order.service.OrderService;
 
 import jakarta.validation.Valid;
@@ -81,6 +82,19 @@ public class OrderController {
         return orderService.findAll();
 
     }
+
+
+        /**
+         * RESTAURANT, DRIVER and ADMIN inspect the order status history
+         */
+        @GetMapping("/{id}/history")
+        public List<OrderStatusHistoryResponse> getOrderHistory(
+                        @PathVariable Long id
+        ){
+
+                return orderService.getOrderStatusHistory(id);
+
+        }
 
 
     /**
