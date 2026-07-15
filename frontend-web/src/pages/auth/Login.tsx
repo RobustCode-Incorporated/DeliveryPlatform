@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/axios';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -14,6 +14,26 @@ export const Login = () => {
   
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const user = useAuthStore((state) => state.user);
+  const token = useAuthStore((state) => state.token);
+
+  useEffect(() => {
+    if (!user || !token) {
+      return;
+    }
+
+    if (user.role === 'ADMIN') {
+      navigate('/admin', { replace: true });
+      return;
+    }
+
+    if (user.role === 'DRIVER') {
+      navigate('/driver', { replace: true });
+      return;
+    }
+
+    navigate('/restaurant', { replace: true });
+  }, [navigate, token, user]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +49,7 @@ export const Login = () => {
       setAuth({ id: decoded.id || 0, email, role }, token);
 
       if (role === 'ADMIN') navigate('/admin');
+      else if (role === 'DRIVER') navigate('/driver');
       else navigate('/restaurant');
       
     } catch (err) {
@@ -54,7 +75,10 @@ export const Login = () => {
       {/* Right Panel */}
       <div className="flex-1 bg-[#FFFAFA] flex items-center justify-center p-5">
         <div className="w-full max-w-[400px]">
-          <h1 className="text-[22px] font-bold mb-6 text-black">Connexion</h1>
+          <h1 className="text-[22px] font-bold mb-3 text-black">Connexion</h1>
+          <p className="mb-6 text-sm text-gray-500">
+            Accédez à votre espace selon votre rôle et reprenez là où vous vous êtes arrêté.
+          </p>
 
           {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">{error}</div>}
 

@@ -29,6 +29,18 @@ public class DeliveryService {
         return repository.findAll();
     }
 
+    public List<Delivery> findMyDeliveries(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getDriver() == null) {
+            throw new RuntimeException("No driver profile assigned to user");
+        }
+
+        return repository.findByDriver(user.getDriver());
+    }
+
     public Delivery findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Delivery not found"));
@@ -81,10 +93,28 @@ public class DeliveryService {
         return repository.save(delivery);
     }
 
-    public Delivery pickupDelivery(Long deliveryId) {
+    private Delivery findAssignedDeliveryForDriver(Long deliveryId, String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getDriver() == null) {
+            throw new RuntimeException("No driver profile assigned to user");
+        }
 
         Delivery delivery = repository.findById(deliveryId)
                 .orElseThrow(() -> new RuntimeException("Delivery not found"));
+
+        if (delivery.getDriver() == null || !delivery.getDriver().getId().equals(user.getDriver().getId())) {
+            throw new RuntimeException("Driver not assigned to this delivery");
+        }
+
+        return delivery;
+    }
+
+    public Delivery pickupDelivery(Long deliveryId, String email) {
+
+        Delivery delivery = findAssignedDeliveryForDriver(deliveryId, email);
 
         if (delivery.getStatus() != Delivery.Status.ASSIGNED) {
             throw new RuntimeException(
@@ -97,10 +127,9 @@ public class DeliveryService {
         return repository.save(delivery);
     }
 
-    public Delivery startDelivery(Long deliveryId) {
+    public Delivery startDelivery(Long deliveryId, String email) {
 
-        Delivery delivery = repository.findById(deliveryId)
-                .orElseThrow(() -> new RuntimeException("Delivery not found"));
+        Delivery delivery = findAssignedDeliveryForDriver(deliveryId, email);
 
         if (delivery.getStatus() != Delivery.Status.PICKED_UP) {
             throw new RuntimeException(
@@ -113,10 +142,9 @@ public class DeliveryService {
         return repository.save(delivery);
     }
 
-    public Delivery completeDelivery(Long deliveryId) {
+    public Delivery completeDelivery(Long deliveryId, String email) {
 
-        Delivery delivery = repository.findById(deliveryId)
-                .orElseThrow(() -> new RuntimeException("Delivery not found"));
+        Delivery delivery = findAssignedDeliveryForDriver(deliveryId, email);
 
         if (delivery.getStatus() != Delivery.Status.IN_TRANSIT) {
             throw new RuntimeException(
@@ -129,6 +157,34 @@ public class DeliveryService {
         if (delivery.getDriver() != null) {
             delivery.getDriver().setAvailabilityStatus(
                     Driver.AvailabilityStatus.AVAILABLE);
+        }
+
+        return repository.save(delivery);
+    }
+
+    public Delivery failDelivery(Long deliveryId, String email, String reason) {
+
+        Delivery delivery = findAssignedDeliveryForDriver(deliveryId, email);
+
+        if (delivery.getStatus() != Delivery.Status.ASSIGNED
+                && delivery.getStatus() != Delivery.Status.PICKED_UP
+                && delivery.getStatus() != Delivery.Status.IN_TRANSIT) {
+            throw new RuntimeException(
+                    "Delivery can only be marked as failed from ASSIGNED, PICKED_UP, or IN_TRANSIT. Current status: "
+                            + delivery.getStatus());
+        }
+
+        delivery.setStatus(Delivery.Status.CANCELLED);
+
+        String existingDescription = delivery.getDescription() == null ? "" : delivery.getDescription().trim();
+        String failureReason = reason == null ? "" : reason.trim();
+        String mergedDescription = existingDescription.isEmpty()
+                ? "ECHEC: " + failureReason
+                : existingDescription + " | ECHEC: " + failureReason;
+        delivery.setDescription(mergedDescription);
+
+        if (delivery.getDriver() != null) {
+            delivery.getDriver().setAvailabilityStatus(Driver.AvailabilityStatus.AVAILABLE);
         }
 
         return repository.save(delivery);
