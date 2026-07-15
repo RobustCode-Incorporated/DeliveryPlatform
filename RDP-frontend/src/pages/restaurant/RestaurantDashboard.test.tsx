@@ -57,7 +57,7 @@ describe('RestaurantDashboard', () => {
     expect(await screen.findAllByText('En attente')).not.toHaveLength(0);
   });
 
-  it('shows demo fallback data when loading fails', async () => {
+  it('shows an error and empty state when loading fails', async () => {
     mockedFetchRestaurantOrders.mockRejectedValue(new Error('network'));
 
     renderRestaurantDashboard();
@@ -65,7 +65,7 @@ describe('RestaurantDashboard', () => {
     expect(
       await screen.findByText(/Impossible de charger les commandes du restaurant/i)
     ).toBeInTheDocument();
-    expect(await screen.findByText('Commande #7001')).toBeInTheDocument();
+    expect(await screen.findByText(/Aucune commande ne correspond aux critères sélectionnés/i)).toBeInTheDocument();
   });
 
   it('opens the order drawer and accepts a pending order', async () => {
