@@ -97,6 +97,16 @@ const formatDateTime = (value: string) =>
     timeStyle: 'short',
   }).format(new Date(value));
 
+const getLastSyncLabel = (relatedOrders: AdminOrderDto[]) => {
+  const latestOrder = relatedOrders[0];
+
+  if (!latestOrder?.createdAt) {
+    return 'Non disponible';
+  }
+
+  return formatDateTime(latestOrder.createdAt);
+};
+
 const mapRestaurantStatus = (status: AdminRestaurantDto['status']) =>
   status === 'ACTIVE' ? 'Ouvert' : 'Fermé';
 
@@ -200,7 +210,7 @@ export const AdminDashboard = () => {
         activeOrders: relatedOrders.filter(
           (order) => order.status !== 'DELIVERED' && order.status !== 'CANCELLED'
         ).length,
-        lastSync: formatDateTime(relatedOrders[0]?.createdAt ?? new Date().toISOString()),
+        lastSync: getLastSyncLabel(relatedOrders),
       };
     });
   }, [orders, restaurants]);

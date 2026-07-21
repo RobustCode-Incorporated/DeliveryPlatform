@@ -48,6 +48,8 @@ const formatDateTime = (value: string) =>
 
 const mapStatus = (status: DriverDeliveryDto['status']) => {
   switch (status) {
+    case 'PENDING':
+      return 'En attente';
     case 'ASSIGNED':
       return 'Affectée';
     case 'PICKED_UP':
