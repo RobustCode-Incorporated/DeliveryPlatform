@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import com.robustcode.delivery.delivery.domain.Delivery;
 import com.robustcode.delivery.delivery.dto.CreateDeliveryRequest;
 import com.robustcode.delivery.delivery.repository.DeliveryRepository;
-import com.robustcode.delivery.user.domain.User;
-import com.robustcode.delivery.user.repository.UserRepository;
 import com.robustcode.delivery.driver.domain.Driver;
 import com.robustcode.delivery.driver.repository.DriverRepository;
 import com.robustcode.delivery.restaurant.domain.Restaurant;
 import com.robustcode.delivery.restaurant.repository.RestaurantRepository;
+import com.robustcode.delivery.user.domain.User;
+import com.robustcode.delivery.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
