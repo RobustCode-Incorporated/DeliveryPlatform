@@ -44,7 +44,7 @@ const clearDeliveryCacheMock = clearDeliveryCache as jest.MockedFunction<typeof 
 
 const baseSession: StoredSession = {
   token: 'token-123',
-  email: 'chauffeur@exemple.com',
+  email: 'driver@test.com',
   role: 'DRIVER',
 };
 
@@ -91,7 +91,7 @@ describe('useDriverApp integration coverage', () => {
     const screen = await render(<DriverAppHarness />);
 
     await waitFor(() => {
-      expect(screen.getByText('session:chauffeur@exemple.com')).toBeTruthy();
+      expect(screen.getByText('session:driver@test.com')).toBeTruthy();
       expect(screen.getByText('screen:list')).toBeTruthy();
     });
 
