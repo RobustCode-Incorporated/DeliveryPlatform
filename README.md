@@ -2,6 +2,8 @@
 
 ROBUST DELIVERY PLATFORM (RDP) is a multi-surface logistics product with a Spring Boot backend, a React web frontend, and a native Expo driver application.
 
+> **Note:** the code for each surface now lives in its own dedicated repository ([RDP-Backend](https://github.com/RobustCode-Incorporated/RDP-Backend), [RDP-Frontend](https://github.com/RobustCode-Incorporated/RDP-Frontend), [RDP-Mobile](https://github.com/RobustCode-Incorporated/RDP-Mobile)). This repository is kept as the shared hub for cross-cutting docs, specs, local infrastructure (`docker/`), and operational scripts — it no longer carries a copy of the application source.
+
 The current implementation is focused on three tracks:
 - backend contracts and workflow rules for orders, deliveries, restaurants, and drivers;
 - web workflows for admin, restaurant, and driver operations;
@@ -9,11 +11,14 @@ The current implementation is focused on three tracks:
 
 ## Workspace Structure
 
-- [RDP-backend](RDP-backend): Spring Boot API, security, Flyway migrations, and delivery domain logic
-- [RDP-frontend](RDP-frontend): Vite + React web application for admin, restaurant, and driver dashboards
-- [RDP-mobile/driver-app](RDP-mobile/driver-app): Expo React Native driver mobile app
+Each surface lives in its own dedicated repository; this repository holds cross-cutting documentation and local infrastructure only:
+
+- [RDP-Backend](https://github.com/RobustCode-Incorporated/RDP-Backend): Spring Boot API, security, Flyway migrations, and delivery domain logic
+- [RDP-Frontend](https://github.com/RobustCode-Incorporated/RDP-Frontend): Vite + React web application for admin, restaurant, and driver dashboards
+- [RDP-Mobile](https://github.com/RobustCode-Incorporated/RDP-Mobile) (`driver-app/`): Expo React Native driver mobile app
 - [docs](docs): roadmap, specification, and review artifacts
 - [docker/docker-compose.yml](docker/docker-compose.yml): local infrastructure bootstrap
+- [scripts](scripts): operational helper scripts (Render smoke check, mobile workflow reset)
 
 ## Tech Stack
 
@@ -48,8 +53,8 @@ The current implementation is focused on three tracks:
   - `PUT /api/deliveries/{id}/start`
   - `PUT /api/deliveries/{id}/complete`
   - `PUT /api/deliveries/{id}/fail`
-- PostgreSQL support for Neon is configured in [RDP-backend/src/main/resources/application-neon.yaml](RDP-backend/src/main/resources/application-neon.yaml).
-- Schema bootstrap and QA seed data are managed in [RDP-backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql](RDP-backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql), [RDP-backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql](RDP-backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql), and [RDP-backend/src/main/resources/db/migration-postgresql/V3__seed_mobile_driver_workflow_data.sql](RDP-backend/src/main/resources/db/migration-postgresql/V3__seed_mobile_driver_workflow_data.sql).
+- PostgreSQL support for Neon is configured in [RDP-Backend/src/main/resources/application-neon.yaml](https://github.com/RobustCode-Incorporated/RDP-Backend/blob/main/src/main/resources/application-neon.yaml).
+- Schema bootstrap and QA seed data are managed in [RDP-Backend/src/main/resources/db/migration-postgresql/V1__init_schema.sql](https://github.com/RobustCode-Incorporated/RDP-Backend/blob/main/src/main/resources/db/migration-postgresql/V1__init_schema.sql), [RDP-Backend/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql](https://github.com/RobustCode-Incorporated/RDP-Backend/blob/main/src/main/resources/db/migration-postgresql/V2__seed_test_accounts.sql), and [RDP-Backend/src/main/resources/db/migration-postgresql/V3__seed_mobile_driver_workflow_data.sql](https://github.com/RobustCode-Incorporated/RDP-Backend/blob/main/src/main/resources/db/migration-postgresql/V3__seed_mobile_driver_workflow_data.sql).
 
 ### Web Frontend
 - Admin, restaurant, and driver workflows are implemented.
@@ -102,10 +107,10 @@ The current app partially covers or still lacks these spec areas:
 ## Validation Snapshot
 
 Recent successful checks include:
-- `mvn -q -DskipTests compile` in [RDP-backend](RDP-backend)
-- `npm run build` and `npm run test` in [RDP-frontend](RDP-frontend)
-- `npx tsc --noEmit` in [RDP-mobile/driver-app](RDP-mobile/driver-app)
-- `npm test -- --runInBand` in [RDP-mobile/driver-app](RDP-mobile/driver-app)
+- `mvn -q -DskipTests compile` in [RDP-Backend](https://github.com/RobustCode-Incorporated/RDP-Backend)
+- `npm run build` and `npm run test` in [RDP-Frontend](https://github.com/RobustCode-Incorporated/RDP-Frontend)
+- `npx tsc --noEmit` in [RDP-Mobile](https://github.com/RobustCode-Incorporated/RDP-Mobile)'s `driver-app/`
+- `npm test -- --runInBand` in [RDP-Mobile](https://github.com/RobustCode-Incorporated/RDP-Mobile)'s `driver-app/`
 - live login verification for seeded admin, restaurant, and driver accounts against the backend auth API
 
 ## Documents
@@ -119,14 +124,14 @@ Recent successful checks include:
 ## Getting Started
 
 ### Backend
-From [RDP-backend](RDP-backend):
+Clone [RDP-Backend](https://github.com/RobustCode-Incorporated/RDP-Backend), then from its root:
 
 ```bash
 mvn -q -DskipTests compile
 ```
 
 ### Web Frontend
-From [RDP-frontend](RDP-frontend):
+Clone [RDP-Frontend](https://github.com/RobustCode-Incorporated/RDP-Frontend), then from its root:
 
 ```bash
 npm install
@@ -134,7 +139,7 @@ npm run dev
 ```
 
 ### Mobile Driver App
-From [RDP-mobile/driver-app](RDP-mobile/driver-app):
+Clone [RDP-Mobile](https://github.com/RobustCode-Incorporated/RDP-Mobile), then from `driver-app/`:
 
 ```bash
 npm install
@@ -150,55 +155,51 @@ npm run ios
 
 ## Render Deployment
 
-This repository is ready for Render Blueprint deployment using [render.yaml](render.yaml).
+Backend and frontend deploy independently, each straight from its own repository, which already includes its own `render.yaml`:
+- [RDP-Backend/render.yaml](https://github.com/RobustCode-Incorporated/RDP-Backend/blob/main/render.yaml) (Java web service, Spring profile `neon`)
+- [RDP-Frontend/render.yaml](https://github.com/RobustCode-Incorporated/RDP-Frontend/blob/main/render.yaml) (static site for the Vite build output)
 
 ### Deploy with Blueprint
 
-1. Push the repository to GitHub.
-2. In Render, choose New + and select Blueprint.
-3. Connect the repository and confirm [render.yaml](render.yaml).
-4. Render creates two services:
-  - `robust-delivery-platform-backend` (Java web service, Spring profile `neon`)
-  - `robust-delivery-platform-frontend` (static site for Vite build output)
-5. Add backend secrets in Render:
+For each repository:
+
+1. In Render, choose New + and select Blueprint.
+2. Connect the repository and confirm its `render.yaml`.
+3. Add backend secrets in Render:
    - `NEON_JDBC_URL`
    - `NEON_DB_USERNAME`
    - `NEON_DB_PASSWORD`
-6. Trigger deploy.
-
-The Blueprint already wires these values automatically:
-- `APP_CORS_ALLOWED_ORIGINS` on backend from frontend Render URL
-- `VITE_API_BASE_URL` on frontend from backend Render URL
+   - `APP_CORS_ALLOWED_ORIGINS` (set to the frontend's Render URL)
+4. Set the frontend's `VITE_API_BASE_URL` to the backend's Render URL.
+5. Trigger deploy.
 
 ### Environment Variables
 
 Backend relies on:
 - `PORT` (provided by Render)
-- `APP_CORS_ALLOWED_ORIGINS` (provided by Blueprint linking)
+- `APP_CORS_ALLOWED_ORIGINS`
 - `NEON_JDBC_URL`
 - `NEON_DB_USERNAME`
 - `NEON_DB_PASSWORD`
 
 Frontend relies on:
-- `VITE_API_BASE_URL` (provided by Blueprint linking)
+- `VITE_API_BASE_URL`
 
 Reference templates:
-- [RDP-backend/.env.render.example](RDP-backend/.env.render.example)
-- [RDP-frontend/.env.example](RDP-frontend/.env.example)
+- [RDP-Backend/.env.render.example](https://github.com/RobustCode-Incorporated/RDP-Backend/blob/main/.env.render.example)
+- [RDP-Frontend/.env.example](https://github.com/RobustCode-Incorporated/RDP-Frontend/blob/main/.env.example)
 
 ### Manual Render Setup (Without Blueprint)
 
-If you prefer manual service creation:
+If you prefer manual service creation per repository:
 
-- Backend service:
-  - Root directory: `backend`
+- Backend service (from RDP-Backend):
   - Build command: `./mvnw clean package -DskipTests`
   - Start command: `java -Dspring.profiles.active=neon -jar target/robust-delivery-platform-0.0.1-SNAPSHOT.jar`
   - Add env vars listed above
 
-- Frontend service:
+- Frontend service (from RDP-Frontend):
   - Environment: Static Site
-  - Root directory: `RDP-frontend`
   - Build command: `npm install && npm run build`
   - Publish directory: `dist`
   - Set `VITE_API_BASE_URL` to backend public URL

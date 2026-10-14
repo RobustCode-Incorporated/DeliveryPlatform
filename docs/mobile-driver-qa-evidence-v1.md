@@ -44,7 +44,7 @@ NEON_DB_PASSWORD='<password>' \
 The helper supports three execution paths:
 - local `psql`, when installed;
 - Docker `postgres:16`, when the Docker daemon is running;
-- Maven + JDBC fallback through [RDP-backend/src/main/java/com/robustcode/delivery/tools/MobileWorkflowResetRunner.java](RDP-backend/src/main/java/com/robustcode/delivery/tools/MobileWorkflowResetRunner.java).
+- Maven + JDBC fallback through [RDP-backend/src/main/java/com/robustcode/delivery/tools/MobileWorkflowResetRunner.java](https://github.com/RobustCode-Incorporated/RDP-Backend/blob/main/src/main/java/com/robustcode/delivery/tools/MobileWorkflowResetRunner.java).
 
 ## Acceptance Criteria Evidence Matrix
 
@@ -59,7 +59,7 @@ The helper supports three execution paths:
 - AC-DM-002
   - Status: PARTIAL
   - Evidence:
-    - code enforces `DRIVER` role gate in [RDP-mobile/driver-app/src/app/useDriverApp.ts](RDP-mobile/driver-app/src/app/useDriverApp.ts)
+    - code enforces `DRIVER` role gate in [RDP-mobile/driver-app/src/app/useDriverApp.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.ts)
     - dedicated integration coverage for this branch is not yet stable in the current Expo/RNTL harness
 
 ### Delivery Loading
@@ -111,21 +111,21 @@ The helper supports three execution paths:
 - AC-DM-031
   - Status: VERIFIED
   - Evidence:
-    - validation exists in [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.tsx](RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.tsx)
-    - automated coverage exists in [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx](RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx)
+    - validation exists in [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/screens/DeliveryDetailScreen.tsx)
+    - automated coverage exists in [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/screens/DeliveryDetailScreen.test.tsx)
 
 ### Offline and Queue
 
 - AC-DM-040
   - Status: VERIFIED_BY_IMPLEMENTATION
   - Evidence:
-    - cached delivery fallback exists in [RDP-mobile/driver-app/src/app/useDriverApp.ts](RDP-mobile/driver-app/src/app/useDriverApp.ts)
-    - stale/fresh messaging exists in [RDP-mobile/driver-app/src/app/syncStatus.ts](RDP-mobile/driver-app/src/app/syncStatus.ts)
+    - cached delivery fallback exists in [RDP-mobile/driver-app/src/app/useDriverApp.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.ts)
+    - stale/fresh messaging exists in [RDP-mobile/driver-app/src/app/syncStatus.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/syncStatus.ts)
 
 - AC-DM-041
   - Status: VERIFIED_BY_IMPLEMENTATION
   - Evidence:
-    - offline queue creation and local optimistic patching exist in [RDP-mobile/driver-app/src/app/useDriverApp.ts](RDP-mobile/driver-app/src/app/useDriverApp.ts)
+    - offline queue creation and local optimistic patching exist in [RDP-mobile/driver-app/src/app/useDriverApp.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.ts)
 
 - AC-DM-042
   - Status: PARTIAL
@@ -138,10 +138,10 @@ The helper supports three execution paths:
 ## Automated Evidence Snapshot
 
 Passing focused mobile tests:
-- [RDP-mobile/driver-app/src/app/offlineQueue.test.ts](RDP-mobile/driver-app/src/app/offlineQueue.test.ts)
-- [RDP-mobile/driver-app/src/app/syncStatus.test.ts](RDP-mobile/driver-app/src/app/syncStatus.test.ts)
-- [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx](RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx)
-- [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx)
+- [RDP-mobile/driver-app/src/app/offlineQueue.test.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/offlineQueue.test.ts)
+- [RDP-mobile/driver-app/src/app/syncStatus.test.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/syncStatus.test.ts)
+- [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/screens/DeliveryDetailScreen.test.tsx)
+- [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.integration.test.tsx)
 
 Integration coverage added on 2026-07-15:
 - unauthorized session reset path via `triggerUnauthorizedHandlerForTests`

@@ -1,0 +1,5 @@
+# OS files
+.DS_Store
+
+# Stray git artifacts that should never be committed
+FETCH_HEAD

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap translates the approved driver mobile specification in [docs/mobile-driver-spec-v1.md](docs/mobile-driver-spec-v1.md) into an implementation-tracking document for the current Expo app in [RDP-mobile/driver-app](RDP-mobile/driver-app).
+This roadmap translates the approved driver mobile specification in [docs/mobile-driver-spec-v1.md](docs/mobile-driver-spec-v1.md) into an implementation-tracking document for the current Expo app in [RDP-mobile/driver-app](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app).
 
 Status legend:
 - DONE: implemented and validated in the current codebase
@@ -52,12 +52,12 @@ Scope:
 - online delivery transitions
 
 Evidence in code:
-- [RDP-mobile/driver-app/src/api/auth.ts](RDP-mobile/driver-app/src/api/auth.ts)
-- [RDP-mobile/driver-app/src/api/driver.ts](RDP-mobile/driver-app/src/api/driver.ts)
-- [RDP-mobile/driver-app/src/app/useDriverApp.ts](RDP-mobile/driver-app/src/app/useDriverApp.ts)
-- [RDP-mobile/driver-app/src/screens/LoginScreen.tsx](RDP-mobile/driver-app/src/screens/LoginScreen.tsx)
-- [RDP-mobile/driver-app/src/screens/DeliveryListScreen.tsx](RDP-mobile/driver-app/src/screens/DeliveryListScreen.tsx)
-- [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.tsx](RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.tsx)
+- [RDP-mobile/driver-app/src/api/auth.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/api/auth.ts)
+- [RDP-mobile/driver-app/src/api/driver.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/api/driver.ts)
+- [RDP-mobile/driver-app/src/app/useDriverApp.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.ts)
+- [RDP-mobile/driver-app/src/screens/LoginScreen.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/screens/LoginScreen.tsx)
+- [RDP-mobile/driver-app/src/screens/DeliveryListScreen.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/screens/DeliveryListScreen.tsx)
+- [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/screens/DeliveryDetailScreen.tsx)
 
 ### Phase M2: Offline Continuity and Queue Safety
 Status: IN PROGRESS
@@ -74,10 +74,10 @@ Remaining in this phase:
 - richer state merge evidence per acceptance criteria
 
 Evidence in code:
-- [RDP-mobile/driver-app/src/app/useDriverApp.ts](RDP-mobile/driver-app/src/app/useDriverApp.ts)
-- [RDP-mobile/driver-app/src/app/offlineQueue.ts](RDP-mobile/driver-app/src/app/offlineQueue.ts)
-- [RDP-mobile/driver-app/src/app/syncStatus.ts](RDP-mobile/driver-app/src/app/syncStatus.ts)
-- [RDP-mobile/driver-app/src/lib/session.ts](RDP-mobile/driver-app/src/lib/session.ts)
+- [RDP-mobile/driver-app/src/app/useDriverApp.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.ts)
+- [RDP-mobile/driver-app/src/app/offlineQueue.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/offlineQueue.ts)
+- [RDP-mobile/driver-app/src/app/syncStatus.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/syncStatus.ts)
+- [RDP-mobile/driver-app/src/lib/session.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/lib/session.ts)
 
 ### Phase M3: Hardening and Release Evidence
 Status: TODO
@@ -119,10 +119,10 @@ Scope:
 ## Test Coverage Snapshot
 
 Current passing tests:
-- [RDP-mobile/driver-app/src/app/offlineQueue.test.ts](RDP-mobile/driver-app/src/app/offlineQueue.test.ts)
-- [RDP-mobile/driver-app/src/app/syncStatus.test.ts](RDP-mobile/driver-app/src/app/syncStatus.test.ts)
-- [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx](RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx)
-- [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx)
+- [RDP-mobile/driver-app/src/app/offlineQueue.test.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/offlineQueue.test.ts)
+- [RDP-mobile/driver-app/src/app/syncStatus.test.ts](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/syncStatus.test.ts)
+- [RDP-mobile/driver-app/src/screens/DeliveryDetailScreen.test.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/screens/DeliveryDetailScreen.test.tsx)
+- [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.integration.test.tsx)
 
 QA evidence tracker:
 - [docs/mobile-driver-qa-evidence-v1.md](docs/mobile-driver-qa-evidence-v1.md)
@@ -142,7 +142,7 @@ Recommended next tests:
 ### Iteration 2
 - DONE: implement queue replay backoff
 - DONE: improve conflict UX with explicit recovery guidance
-- DONE: add integration coverage around replay and unauthorized reset in [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx)
+- DONE: add integration coverage around replay and unauthorized reset in [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.integration.test.tsx)
 
 ### Iteration 3
 - add telemetry hooks
@@ -169,4 +169,4 @@ Mobile v1 should be considered release-ready only when all of the following are 
 - 2026-07-15: Added [scripts/reset-mobile-driver-workflow.sh](scripts/reset-mobile-driver-workflow.sh) plus [scripts/reset-mobile-driver-workflow.sql](scripts/reset-mobile-driver-workflow.sql) to restore the mixed-state QA dataset on demand.
 - 2026-07-15: Live backend verification again returned `ASSIGNED`, `PICKED_UP`, and `IN_TRANSIT` deliveries for `driver@test.com` after running the reset helper.
 - 2026-07-15: Clean Android walkthrough captured transition evidence for pickup (`#1`), start+complete (`#2`), and fail (`#3`) with artifacts under [docs/qa](docs/qa).
-- 2026-07-15: Added [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx) covering unauthorized session reset and queued replay cleanup.
+- 2026-07-15: Added [RDP-mobile/driver-app/src/app/useDriverApp.integration.test.tsx](https://github.com/RobustCode-Incorporated/RDP-Mobile/blob/main/driver-app/src/app/useDriverApp.integration.test.tsx) covering unauthorized session reset and queued replay cleanup.
