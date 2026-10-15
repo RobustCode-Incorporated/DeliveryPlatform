@@ -121,7 +121,18 @@ Recent successful checks include:
 - [docs/mobile-development-roadmap.md](docs/mobile-development-roadmap.md)
 - [docs/mobile-driver-qa-evidence-v1.md](docs/mobile-driver-qa-evidence-v1.md)
 
+## Security
+
+See [SECURITY.md](SECURITY.md) for how to report issues, the "never commit secrets" rule, and the owner checklist before the pilot.
+
 ## Getting Started
+
+### Local infrastructure (MySQL, optional)
+
+```bash
+cp docker/.env.example docker/.env   # local-only credentials, git-ignored
+docker compose -f docker/docker-compose.yml up -d
+```
 
 ### Backend
 Clone [RDP-Backend](https://github.com/RobustCode-Incorporated/RDP-Backend), then from its root:
