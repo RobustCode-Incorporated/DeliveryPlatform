@@ -1,15 +1,19 @@
+# Local development database.
+# Credentials come from docker/.env (copy docker/.env.example first):
+#   cp docker/.env.example docker/.env
+#   docker compose -f docker/docker-compose.yml up -d
 services:
   mysql:
     image: mysql:8.4
     container_name: delivery-mysql
     restart: always
     environment:
-      MYSQL_DATABASE: delivery_db
-      MYSQL_USER: delivery_user
-      MYSQL_PASSWORD: delivery_password
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-delivery_db}
+      MYSQL_USER: ${MYSQL_USER:-delivery_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in docker/.env (see docker/.env.example)}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in docker/.env (see docker/.env.example)}
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
